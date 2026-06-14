@@ -65,13 +65,14 @@ class TricetValkaEvents(str, Enum):
     LIGHT = "tricet_valka_light"
     LIGHT_OFF = "tricet_valka_light_off"
     TOUR_START = "tour_start"
+    KONEC = "tricet_valka_konec"
     NEXT = "tricet_next"
 
 
 class TricetValka(Location):
-    """Tricetileta Valka location behavior."""
+    """Stanoviště Tricetileta Valka"""
     
-    name = "Tricetileta Valka"
+    name = "Třicetiletá Válka"
     config_id = "tricet_valka"
     
     def enter_location(self, send_event: SendEvent):
@@ -80,13 +81,6 @@ class TricetValka(Location):
         self.tlacitko2_time = datetime.fromtimestamp(0)
         send_event(TricetValkaEvents.MP3)
         Timer(180, lambda: send_event(TricetValkaEvents.VIDEO)).start()
-        
-    def final_sequence(self, send_event: SendEvent):
-        """Run the output sequence that leads to the next location."""
-        send_event(TricetValkaEvents.VALKA_UV_OFF)
-        send_event(TricetValkaEvents.LIGHT)
-        send_event(TricetValkaEvents.MP3_2)
-        Timer(20, lambda: send_event(TricetValkaEvents.NEXT)).start()
         
     def process_event(
         self,
@@ -107,12 +101,12 @@ class TricetValka(Location):
         if event_id == TricetValkaEvents.TLACITKO1:
             self.tlacitko1_time = datetime.now()
             if (self.tlacitko1_time - self.tlacitko2_time).total_seconds() < 2:
-                send_event(TricetValkaEvents.NEXT)
+                send_event(TricetValkaEvents.KONEC)
                 
         if event_id == TricetValkaEvents.TLACITKO2:
             self.tlacitko2_time = datetime.now()
             if (self.tlacitko2_time - self.tlacitko1_time).total_seconds() < 2:
-                send_event(TricetValkaEvents.NEXT)
+                send_event(TricetValkaEvents.KONEC)
                          
         if event_id == TricetValkaEvents.NEXT:
             print("changing locations")
