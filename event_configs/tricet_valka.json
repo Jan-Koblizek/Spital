@@ -2,6 +2,25 @@
   "location": "tricet_valka",
   "events": [
     {
+      "id": "tricet_valka_konec",
+      "name": "Konečná Sekvence",
+      "topic": [
+        "spital/30_valka/uv", 
+        "spital/30_valka/rgb/brightness", 
+        "spital/30_valka/rgb/rgb",
+        "spital/30_valka/mp3_2",
+        "spital/30valka/next"
+      ],
+      "description": "Pusť video, zahasni UV, rosviť RGB, ukonči lokaci",
+      "payload": [
+        ["0", 0],
+        ["0.25", 0],
+        ["#FFAAAA",0.1],
+        ["30valka.wav", 0.5],
+        ["1", 20]
+      ]
+    },
+    {
       "id": "tricet_valka_tlacitko1",
       "name": "První Tlačítko",
       "topic": "spital/30_valka/tlacitko1",
