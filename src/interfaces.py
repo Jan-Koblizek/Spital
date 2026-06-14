@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import Callable
 
@@ -40,6 +41,14 @@ class EventMessage:
     topic: str
     payload: bytes | None = None
     delay: float = 0.0
+
+    def to_dict(self) -> dict[str, str | float | None]:
+        """Return a frontend-safe representation of this MQTT message."""
+        return {
+            "topic": self.topic,
+            "payload": self.payload.decode("utf-8") if self.payload is not None else None,
+            "delay": self.delay,
+        }
 
 
 @dataclass(frozen=True)
@@ -83,7 +92,7 @@ class Event:
 
         return (EventMessage(topic=self.topic, payload=self.payload),)
 
-    def to_dict(self) -> dict[str, str | bool]:
+    def to_dict(self) -> dict[str, object]:
         """Return a frontend-safe representation of the event."""
         return {
             "id": self.id,
@@ -91,6 +100,10 @@ class Event:
             "topic": self.topic,
             "description": self.description,
             "has_payload": any(message.payload is not None for message in self.outbound_messages()),
+            "messages": [
+                message.to_dict()
+                for message in self.outbound_messages()
+            ],
         }
     
 
@@ -121,7 +134,7 @@ class Location:
             payload (str | None): decoded event payload
             send_event (SendEvent): object we can use to publish our own Events
         """
-        pass
+        return self
     
     def change_location(self, new: Location, send_event: SendEvent) -> Location:
         """Switch to another location.
@@ -137,8 +150,8 @@ class Location:
     
     def enter_location(self, send_event: SendEvent):
         """Run setup logic when players enter this location."""
-        pass
+        return None
         
     def exit_location(self, send_event: SendEvent):
         """Run cleanup logic when players leave this location."""
-        pass
+        return None

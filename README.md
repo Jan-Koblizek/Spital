@@ -197,6 +197,13 @@ Pokud vsechny stavy sedi, metoda vrati `True`. Lokace pak sama rozhodne, jakou u
 
 Spustte aplikaci a otevrene URL, ktere se vypise do konzole.
 
+Adresa frontendu se nastavuje v `.env`:
+
+```env
+FRONTEND_HOST=127.0.0.1
+FRONTEND_PORT=8000
+```
+
 Frontend umoznuje:
 
 - spustit runtime

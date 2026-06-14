@@ -32,6 +32,13 @@ class DeviceStateConfig:
     request_payload: bytes | None
 
 
+@dataclass(frozen=True)
+class FrontendConfig:
+    """Configuration for the frontend HTTP server."""
+    host: str
+    port: int
+
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 
@@ -65,4 +72,9 @@ device_state_config = DeviceStateConfig(
         if os.getenv("DEVICE_STATE_REQUEST_PAYLOAD", "1") != ""
         else None
     ),
+)
+
+frontend_config = FrontendConfig(
+    host=os.getenv("FRONTEND_HOST", "127.0.0.1"),
+    port=int(os.getenv("FRONTEND_PORT", "8000")),
 )

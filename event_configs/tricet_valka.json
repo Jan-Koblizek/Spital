@@ -60,32 +60,24 @@
       "payload": "30valka.wav;30valkamp3"
     },
     {
-      "id": "tricet_valka_brightness",
-      "name": "Nastav Intenzitu Barevného Světla",
+      "id": "tricet_valka_light",
+      "name": "Nastav Barevné Světlo",
       "topic": "spital/30valka/rgb",
-      "description": "Nastav RGB",
-      "payload": ""
+      "description": "Nastav intenzitu a barvu RGB světla",
+      "payload": [
+        ["", 0],
+        ["", 0]
+      ]
     },
     {
-      "id": "tricet_valka_rgb",
-      "name": "Nastav Barvu Světla",
+      "id": "tricet_valka_light_off",
+      "name": "Vypni Barevné Světlo",
       "topic": "spital/30valka/rgb",
-      "description": "Nastav RGB",
-      "payload": ""
-    },
-    {
-      "id": "tricet_valka_brightness_off",
-      "name": "Vypni RGB Světlo (Brightness)",
-      "topic": "spital/30valka/rgb",
-      "description": "Nastav RGB",
-      "payload": ""
-    },
-    {
-      "id": "tricet_valka_rgb_off",
-      "name": "Vypni RGB Světlo (barva)",
-      "topic": "spital/30valka/rgb",
-      "description": "Nastav RGB",
-      "payload": ""
+      "description": "Vypni intenzitu a barvu RGB světla",
+      "payload": [
+        ["", 0],
+        ["", 0]
+      ]
     },
     {
       "id": "tricet_next",
