@@ -1,0 +1,97 @@
+{
+  "location": "tricet_valka",
+  "events": [
+    {
+      "id": "tricet_valka_tlacitko1",
+      "name": "První Tlačítko",
+      "topic": "spital/30_valka/tlacitko1",
+      "description": "Dítě zmáčklo tlačítko",
+      "payload": "1",
+      "condition": "1"
+    },
+    {
+      "id": "tricet_valka_tlacitko2",
+      "name": "Druhé Tlačítko",
+      "topic": "spital/30_valka/tlacitko2",
+      "description": "Dosplělý zmáčkl tlačítko",
+      "payload": "1",
+      "condition": "1"
+    },
+    {
+      "id": "30_valka_uv",
+      "name": "Nahoď UV pásek",
+      "topic": "spital/30valka/uv",
+      "description": "Zapni UV pásek",
+      "payload": "1"
+    },
+    {
+      "id": "30_valka_uv_off",
+      "name": "Vypni UV pásek",
+      "topic": "spital/30valka/uv",
+      "description": "Vypni UV pásek",
+      "payload": "0"
+    },
+    {
+      "id": "tricet_valka_mp3",
+      "name": "MP3 Třicetiletá Válka",
+      "topic": "spital/rpi_obraz_zvuk/1",
+      "description": "Spusť MP3 povídání ke 30 leté válce",
+      "payload": "30valka.mp3"
+    },
+    {
+      "id": "tricet_valka_mp3_2",
+      "name": "MP3 Třicetiletá Válka - 2",
+      "topic": "spital/rpi_obraz_zvuk/2",
+      "description": "Spusť druhé MP3 povídání ke 30 leté válce",
+      "payload": "30valka_2.mp3"
+    },
+    {
+      "id": "tricet_valka_mp3_3",
+      "name": "MP3 Třicetiletá Válka - 3",
+      "topic": "spital/rpi_obraz_zvuk/3",
+      "description": "Spusť MP3 po dokončení úkolu",
+      "payload": "30valka_3.mp3"
+    },
+    {
+      "id": "tricet_valka_video",
+      "name": "Video Třicetiletá Válka",
+      "topic": "spital/tv_1_01",
+      "description": "Spusť Video ke 30 leté válce",
+      "payload": "30valka.wav;30valkamp3"
+    },
+    {
+      "id": "tricet_valka_brightness",
+      "name": "Nastav Intenzitu Barevného Světla",
+      "topic": "spital/30valka/rgb",
+      "description": "Nastav RGB",
+      "payload": ""
+    },
+    {
+      "id": "tricet_valka_rgb",
+      "name": "Nastav Barvu Světla",
+      "topic": "spital/30valka/rgb",
+      "description": "Nastav RGB",
+      "payload": ""
+    },
+    {
+      "id": "tricet_valka_brightness_off",
+      "name": "Vypni RGB Světlo (Brightness)",
+      "topic": "spital/30valka/rgb",
+      "description": "Nastav RGB",
+      "payload": ""
+    },
+    {
+      "id": "tricet_valka_rgb_off",
+      "name": "Vypni RGB Světlo (barva)",
+      "topic": "spital/30valka/rgb",
+      "description": "Nastav RGB",
+      "payload": ""
+    },
+    {
+      "id": "tricet_next",
+      "name": "Další Scéna",
+      "topic": "spital/30valka/next",
+      "description": "Přejdi do scény Adolf."
+    }
+  ]
+}

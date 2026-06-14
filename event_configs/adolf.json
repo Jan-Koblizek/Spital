@@ -1,0 +1,18 @@
+{
+  "location": "adolf",
+  "events": [
+    {
+      "id": "adolf_next",
+      "name": "30 next",
+      "topic": "spital/adolf/next",
+      "description": "Transfer from 30 valka to Adolf."
+    },
+    {
+      "id": "adolf_valka_mp3_1",
+      "name": "Tour Start",
+      "topic": "spital/rpi_obraz_zvuk/2",
+      "description": "MP3 play",
+      "payload": "Play the damn MP3"
+    }
+  ]
+}

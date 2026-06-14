@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Frontend</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page">
+    <section class="workspace">
+      <div class="toolbar">
+        <button id="refresh-button" class="secondary-button" type="button">Refresh</button>
+        <button id="reload-events-button" class="secondary-button" type="button">Reload events</button>
+      </div>
+
+      <section aria-labelledby="start-events-heading">
+        <h2 id="start-events-heading">Start</h2>
+        <div id="start-event-list" class="event-list" aria-live="polite"></div>
+      </section>
+
+      <section aria-labelledby="runtimes-heading">
+        <h2 id="runtimes-heading">Runtimes</h2>
+        <div id="runtime-list" class="runtime-list" aria-live="polite"></div>
+      </section>
+
+      <p id="status-message" class="status" aria-live="polite"></p>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

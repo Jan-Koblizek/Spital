@@ -1,0 +1,27 @@
+{
+  "location": "start",
+  "events": [
+    {
+      "id": "init",
+      "name": "Nová skupina",
+      "topic": "spital/start/start",
+      "description": "Přišla nová skupina - bude potřeba udělat kontrolu a spustit prohlídku",
+      "payload": "1"
+    },
+    {
+      "id": "kontrola",
+      "name": "Kontrola před zahájením.",
+      "topic": "spital/start/spinac_zahajeni",
+      "description": "Příprava na novou tour - zkontroluj, že je všechno v počátečním stavu.",
+      "payload": "1"
+    },
+    {
+      "id": "tour_start",
+      "name": "Zacatek Tour",
+      "topic": "spital/start/spinac_zahajeni",
+      "description": "Průvodce spouští escape room",
+      "payload": "1",
+      "condition": "1"
+    }
+  ]
+}
