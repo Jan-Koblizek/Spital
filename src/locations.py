@@ -62,10 +62,8 @@ class TricetValkaEvents(str, Enum):
     MP3_2 = "tricet_valka_mp3_2"
     MP3_3 = "tricet_valka_mp3_3"
     VIDEO = "tricet_valka_video"
-    BRIGHTNESS = "tricet_valka_brightness"
-    RGB = "tricet_valka_rgb"
-    BRIGHTNESS_OFF = "tricet_valka_brightness_off"
-    RGB_OFF = "tricet_valka_rgb_off"
+    LIGHT = "tricet_valka_light"
+    LIGHT_OFF = "tricet_valka_light_off"
     TOUR_START = "tour_start"
     NEXT = "tricet_next"
 
@@ -85,10 +83,8 @@ class TricetValka(Location):
         
     def final_sequence(self, send_event: SendEvent):
         """Run the output sequence that leads to the next location."""
-        # TODO: Could probably be defined as a single event
         send_event(TricetValkaEvents.VALKA_UV_OFF)
-        send_event(TricetValkaEvents.BRIGHTNESS)
-        send_event(TricetValkaEvents.RGB)
+        send_event(TricetValkaEvents.LIGHT)
         send_event(TricetValkaEvents.MP3_2)
         Timer(20, lambda: send_event(TricetValkaEvents.NEXT)).start()
         

@@ -8,12 +8,12 @@ from threading import Lock
 from time import sleep
 
 from communicator import Communicator
-from config import device_state_config
+from config import device_state_config, frontend_config
 from device_state import DeviceStateChecker, DeviceStateChecks, load_device_state_definition
 from event_config import EVENTS_BY_ID, EVENTS_BY_TOPIC, reload_events
 from frontend_server import FrontendServer
-from locations import *
 from interfaces import Event
+from locations import Start, StartEvents, TricetValkaEvents
 from runtime import EscapeRoomRuntime, OutboundEventSender
 
 
@@ -44,11 +44,13 @@ def main() -> None:
     frontend_dir = Path(__file__).resolve().parent.parent / "frontend"
     frontend = FrontendServer(
         frontend_dir,
-        lambda: runtime_manager.state(device_state_checker),
+        lambda: runtime_manager.state(device_state_checker, communicator.sent_messages()),
         runtime_manager.trigger_runtime_event,
         runtime_manager.trigger_start_event,
         runtime_manager.kill_runtime,
         reload_events,
+        frontend_config.host,
+        frontend_config.port,
     )
 
     communicator.start()
@@ -125,8 +127,12 @@ class RuntimeManager:
         self._next_runtime_number = 1
         self.send_event = send_event
 
-    def state(self, device_state_checker: DeviceStateChecker | None = None) -> dict[str, object]:
-        """Return frontend state for every runtime plus the global start event."""
+    def state(
+        self,
+        device_state_checker: DeviceStateChecker | None = None,
+        sent_messages: list[dict[str, str | bool | None]] | None = None,
+    ) -> dict[str, object]:
+        """Return frontend state for every runtime plus global status."""
         with self._lock:
             runtimes = [self._runtime_state(runtime) for runtime in self._runtimes]
 
@@ -136,6 +142,7 @@ class RuntimeManager:
         return {
             "runtimes": runtimes,
             "start_event": start_event.to_dict() if start_event is not None else None,
+            "sent_messages": sent_messages or [],
             "device_state": device_state,
         }
 

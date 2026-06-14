@@ -1,4 +1,7 @@
 """Communication with the outside world."""
+from datetime import datetime
+from dataclasses import dataclass
+from threading import Lock
 from threading import Timer
 from typing import Callable
 import paho.mqtt.client as mqtt
@@ -9,6 +12,24 @@ from interfaces import Event, EventMessage
 
 # Function that receives decoded incoming MQTT messages.
 MessageHandler = Callable[[str, str | None], None]
+
+
+@dataclass(frozen=True)
+class SentMessage:
+    """One message sent through the communicator."""
+    topic: str
+    payload: str | None
+    sent_at: str
+    offline: bool
+
+    def to_dict(self) -> dict[str, str | bool | None]:
+        """Return a frontend-safe representation of this sent message."""
+        return {
+            "topic": self.topic,
+            "payload": self.payload,
+            "sent_at": self.sent_at,
+            "offline": self.offline,
+        }
 
 
 class Communicator:
@@ -27,6 +48,8 @@ class Communicator:
         self.message_handler = message_handler
         self.mqtt_client: mqtt.Client | None = None
         self.mqtt_connected = False
+        self._sent_messages: list[SentMessage] = []
+        self._sent_messages_lock = Lock()
     
     def start(self):
         """Start handling MQTT traffic in the background."""
@@ -136,8 +159,12 @@ class Communicator:
         advancing the runtime when no broker is reachable.
         """
         print(f"sending: {topic}, {payload}")
-        if self.mqtt_client is None or not self.mqtt_connected:
-            self.message_handler(topic, self._decode_payload(payload))
+        offline = self.mqtt_client is None or not self.mqtt_connected
+        decoded_payload = self._decode_payload(payload)
+        self._record_sent_message(topic, decoded_payload, offline)
+
+        if offline:
+            self.message_handler(topic, decoded_payload)
             return
 
         result = self.mqtt_client.publish(
@@ -149,6 +176,27 @@ class Communicator:
 
         if result.rc != mqtt.MQTT_ERR_SUCCESS:
             print(f"Failed to publish MQTT message. rc={result.rc}")
+
+    def sent_messages(self) -> list[dict[str, str | bool | None]]:
+        """Return recently sent MQTT messages for frontend display."""
+        with self._sent_messages_lock:
+            return [
+                message.to_dict()
+                for message in self._sent_messages
+            ]
+
+    def _record_sent_message(self, topic: str, payload: str | None, offline: bool) -> None:
+        """Remember one outgoing message for the frontend log."""
+        message = SentMessage(
+            topic=topic,
+            payload=payload,
+            sent_at=datetime.now().isoformat(timespec="seconds"),
+            offline=offline,
+        )
+
+        with self._sent_messages_lock:
+            self._sent_messages.append(message)
+            self._sent_messages = self._sent_messages[-5:]
 
     def _decode_payload(self, payload: bytes | None) -> str | None:
         """Decode MQTT payload bytes to text used by runtime logic."""

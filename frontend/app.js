@@ -3,10 +3,12 @@ const reloadEventsButton = document.querySelector("#reload-events-button");
 const statusMessage = document.querySelector("#status-message");
 const startEventList = document.querySelector("#start-event-list");
 const runtimeList = document.querySelector("#runtime-list");
+const eventCommandList = document.querySelector("#event-command-list");
 
 let runtimes = [];
 let startEvent = null;
 let deviceState = null;
+let sentMessages = [];
 
 async function refreshRuntimeState() {
   try {
@@ -20,6 +22,7 @@ async function refreshRuntimeState() {
     runtimes = state.runtimes ?? [];
     startEvent = state.start_event ?? null;
     deviceState = state.device_state ?? null;
+    sentMessages = state.sent_messages ?? [];
 
     render();
   } catch (error) {
@@ -108,6 +111,7 @@ function render() {
   renderDeviceState();
   renderStartEvent();
   renderRuntimes();
+  renderSentMessages();
 }
 
 function renderDeviceState() {
@@ -215,6 +219,31 @@ function renderRuntime(runtime) {
 
   section.append(events);
   return section;
+}
+
+function renderSentMessages() {
+  eventCommandList.innerHTML = "";
+
+  if (!sentMessages.length) {
+    eventCommandList.append(emptyState("No events sent yet."));
+    return;
+  }
+
+  for (const message of [...sentMessages].reverse()) {
+    eventCommandList.append(renderSentMessage(message));
+  }
+}
+
+function renderSentMessage(message) {
+  const block = document.createElement("pre");
+  block.className = "event-command";
+  const payload = message.payload ?? "<none>";
+  const mode = message.offline ? "offline" : "mqtt";
+  block.textContent = [
+    `${message.sent_at}  ${mode}`,
+    `  ${message.topic}  payload=${JSON.stringify(payload)}`,
+  ].join("\n");
+  return block;
 }
 
 function renderLocationVariables(variables) {

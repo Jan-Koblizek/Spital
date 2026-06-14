@@ -181,6 +181,25 @@ button:disabled:hover {
   gap: 16px;
 }
 
+.event-command-list {
+  display: grid;
+  gap: 8px;
+}
+
+.event-command {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 6px;
+  background: #111827;
+  color: #e5e7eb;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 .event-block {
   display: flex;
   min-height: 240px;

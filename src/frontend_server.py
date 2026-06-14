@@ -81,32 +81,17 @@ class FrontendRequestHandler(SimpleHTTPRequestHandler):
 
     def _send_runtime_state(self) -> None:
         """Return current runtime state as JSON."""
-        payload = json.dumps(self.state_provider()).encode("utf-8")
-        self.send_response(200)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Content-Length", str(len(payload)))
-        self.end_headers()
-        self.wfile.write(payload)
+        self._send_json(200, self.state_provider())
 
     def _reload_events(self) -> None:
         """Reload event config and report validation errors to the frontend."""
         try:
             self.event_reloader()
         except Exception as exc:
-            payload = json.dumps({"ok": False, "error": str(exc)}).encode("utf-8")
-            self.send_response(500)
-            self.send_header("Content-Type", "application/json")
-            self.send_header("Content-Length", str(len(payload)))
-            self.end_headers()
-            self.wfile.write(payload)
+            self._send_json(500, {"ok": False, "error": str(exc)})
             return
 
-        payload = json.dumps({"ok": True}).encode("utf-8")
-        self.send_response(200)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Content-Length", str(len(payload)))
-        self.end_headers()
-        self.wfile.write(payload)
+        self._send_ok()
 
     def _trigger_start_event(self, event_id: str) -> None:
         """Trigger a global start event that may create a runtime."""
@@ -114,12 +99,7 @@ class FrontendRequestHandler(SimpleHTTPRequestHandler):
             self.send_error(409)
             return
 
-        payload = json.dumps({"ok": True}).encode("utf-8")
-        self.send_response(200)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Content-Length", str(len(payload)))
-        self.end_headers()
-        self.wfile.write(payload)
+        self._send_ok()
 
     def _trigger_runtime_event(self, runtime_id: str, event_id: str) -> None:
         """Trigger an event inside one active runtime."""
@@ -127,12 +107,7 @@ class FrontendRequestHandler(SimpleHTTPRequestHandler):
             self.send_error(404)
             return
 
-        payload = json.dumps({"ok": True}).encode("utf-8")
-        self.send_response(200)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Content-Length", str(len(payload)))
-        self.end_headers()
-        self.wfile.write(payload)
+        self._send_ok()
 
     def _kill_runtime(self, runtime_id: str) -> None:
         """Stop and remove one active runtime."""
@@ -140,8 +115,16 @@ class FrontendRequestHandler(SimpleHTTPRequestHandler):
             self.send_error(404)
             return
 
-        payload = json.dumps({"ok": True}).encode("utf-8")
-        self.send_response(200)
+        self._send_ok()
+
+    def _send_ok(self) -> None:
+        """Return a standard successful JSON response."""
+        self._send_json(200, {"ok": True})
+
+    def _send_json(self, status: int, data: object) -> None:
+        """Return JSON with common headers."""
+        payload = json.dumps(data).encode("utf-8")
+        self.send_response(status)
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(payload)))
         self.end_headers()
@@ -159,8 +142,8 @@ class FrontendServer:
         start_event_trigger: StartEventTrigger,
         runtime_killer: RuntimeKiller,
         event_reloader: EventReloader,
-        host: str = "127.0.0.1",
-        port: int = 8000,
+        host: str,
+        port: int,
     ):
         """Prepare the HTTP server for static files and API requests."""
         handler = partial(
