@@ -65,6 +65,7 @@ class Event:
     payload: bytes | None = None    # The message associated with the event
     conditions: tuple[PayloadCondition, ...] = ()
     messages: tuple[EventMessage, ...] = ()
+    incoming: bool = True           # Whether incoming MQTT messages can trigger this event
 
     def with_payload(self, payload: bytes | None) -> Event:
         """Return this event definition with a concrete payload."""
@@ -76,6 +77,7 @@ class Event:
             payload=payload,
             conditions=self.conditions,
             messages=self.messages,
+            incoming=self.incoming,
         )
 
     def conditions_match(self, payload: str | None) -> bool:

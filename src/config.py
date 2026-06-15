@@ -28,8 +28,6 @@ class EventConfig:
 class DeviceStateConfig:
     """Configuration for device state definition files."""
     directory: Path
-    request_topic: str
-    request_payload: bytes | None
 
 
 @dataclass(frozen=True)
@@ -66,12 +64,6 @@ event_config = EventConfig(
 
 device_state_config = DeviceStateConfig(
     directory=_path_from_env("DEVICE_STATE_CONFIG_DIR", PROJECT_ROOT / "device_state_configs"),
-    request_topic=os.getenv("DEVICE_STATE_REQUEST_TOPIC", "spital/state/request"),
-    request_payload=(
-        os.getenv("DEVICE_STATE_REQUEST_PAYLOAD", "1").encode("utf-8")
-        if os.getenv("DEVICE_STATE_REQUEST_PAYLOAD", "1") != ""
-        else None
-    ),
 )
 
 frontend_config = FrontendConfig(

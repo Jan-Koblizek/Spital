@@ -37,6 +37,7 @@ Polozky:
 - `description`: zobrazuje se ve frontendu.
 - `payload`: hodnota odeslana pri spusteni udalosti z kodu nebo frontendu.
 - `condition`: volitelna podminka pro prichozi payload.
+- `incoming`: volitelne; `false` znamena, ze udalost lze spustit z kodu nebo frontendu, ale prichozi MQTT zprava ji nespusti.
 
 Jedna udalost muze odeslat i vice MQTT zprav. `topic` muze byt jeden topic nebo seznam topicu. `payload` muze byt jedna hodnota nebo seznam dvojic `[payload, zpozdeni_v_sekundach]`.
 
@@ -99,8 +100,8 @@ Logika mistnosti je v `src/locations.py`.
 Zacatek a konec tour jsou zamerne viditelne v `src/main.py`:
 
 ```python
-START_EVENT_ID = "tour_start"
-START_LOCATION = TricetValka
+START_EVENT_ID = StartEvents.INIT
+START_LOCATION = Start
 END_EVENT_IDS = {
     TricetValkaEvents.NEXT,
 }
@@ -145,7 +146,7 @@ Uzitecne pomocne funkce:
 
 - `send_event(TricetValkaEvents.MP3)`: odesle nakonfigurovanou udalost podle id z enumu.
 - `Timer(seconds, lambda: send_event(TricetValkaEvents.VIDEO)).start()`: odesle udalost se zpozdenim.
-- `DeviceStateChecks.check()`: zkontroluje nakonfigurovane stavy zarizeni a vrati `True` nebo `False`.
+- `DeviceStateChecks.check(lambda: send_event(StartEvents.KONTROLA))`: pozada zarizeni o stav, zkontroluje odpovedi a vrati `True` nebo `False`.
 - `return self.change_location(OtherLocation(), send_event)`: prejde do jine lokace.
 
 Lokace s `config_id = None` je finalni. Kdyz do ni runtime vstoupi, skonci a zmizi z frontendu.
@@ -170,16 +171,22 @@ Vyklad:
 
 Kdyz se spusti kontrola stavu:
 
-1. Aplikace odesle MQTT zpravu s pozadavkem na stav.
+1. Lokace odesle udalost, ktera pozada zarizeni o stav.
 2. Zarizeni maji poslat svuj aktualni stav.
 3. Aplikace ceka maximalne 2 sekundy.
 4. Pokud dorazi vsechny nakonfigurovane topicy a hodnoty sedi, kontrola projde.
 
-Zprava s pozadavkem na stav se nastavuje v `.env`:
+Udalost `kontrola` je v `event_configs/start.json`. Pro pozadavek na stav je vhodne ji nastavit jako odchozi-only, aby se vlastni MQTT publish nevratil zpet jako dalsi runtime udalost:
 
-```env
-DEVICE_STATE_REQUEST_TOPIC=spital/state/request
-DEVICE_STATE_REQUEST_PAYLOAD=1
+```json
+{
+  "id": "kontrola",
+  "name": "Kontrola pred zahajenim.",
+  "topic": "spital/state/request",
+  "description": "Priprava na novou tour.",
+  "payload": "1",
+  "incoming": false
+}
 ```
 
 Kontrolu lze zavolat z lokace pres statickou tridu:
@@ -187,11 +194,11 @@ Kontrolu lze zavolat z lokace pres statickou tridu:
 ```python
 from device_state import DeviceStateChecks
 
-if DeviceStateChecks.check():
-    send_event(TricetValkaEvents.KONTROLA_OK)
+if DeviceStateChecks.check(lambda: send_event(StartEvents.KONTROLA)):
+    send_event(StartEvents.START)
 ```
 
-Pokud vsechny stavy sedi, metoda vrati `True`. Lokace pak sama rozhodne, jakou udalost odesle nebo co udela dal.
+`DeviceStateChecks.check(...)` nejdriv zacne poslouchat odpovedi, potom zavola predanou funkci a nakonec ceka na nakonfigurovane stavy. Samotna kontrola nevi, jakou udalost lokace pouziva pro dotaz na zarizeni.
 
 ## Frontend
 
