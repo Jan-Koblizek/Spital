@@ -20,9 +20,8 @@ class Start(Location):
     config_id = "start"
     
     def enter_location(self, send_event: SendEvent):
-        """Initialize the location, perfomr checks"""
-        self.zkontrolovano = False
-        send_event(StartEvents.KONTROLA)
+        """Initialize the location and run the initial device-state check."""
+        self.zkontrolovano = self._check_initial_state(send_event)
     
     def process_event(
         self,
@@ -41,10 +40,14 @@ class Start(Location):
             Location: new location (or self if location didn't change)
         """
         if event_id == StartEvents.KONTROLA:
-            self.zkontrolovano = DeviceStateChecks.check()
+            self.zkontrolovano = self._check_initial_state(send_event)
         if event_id == StartEvents.START and self.zkontrolovano:
             return self.change_location(TricetValka(), send_event)
         return self
+
+    def _check_initial_state(self, send_event: SendEvent) -> bool:
+        """Ask devices for state and wait for their configured responses."""
+        return DeviceStateChecks.check(lambda: send_event(StartEvents.KONTROLA))
     
 
 

@@ -6,9 +6,10 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from threading import Lock
 from time import sleep
+from typing import Callable
 
 from communicator import Communicator
-from config import device_state_config, frontend_config
+from config import frontend_config
 from device_state import DeviceStateChecker, DeviceStateChecks, load_device_state_definition
 from event_config import EVENTS_BY_ID, EVENTS_BY_TOPIC, reload_events
 from frontend_server import FrontendServer
@@ -39,7 +40,7 @@ def main() -> None:
     communicator = Communicator(
         lambda topic, payload: handle_message(runtime_manager, device_state_checker, topic, payload)
     )
-    DeviceStateChecks.configure(lambda: execute_device_state_check(communicator, device_state_checker))
+    DeviceStateChecks.configure(lambda request_state=None: execute_device_state_check(device_state_checker, request_state))
 
     frontend_dir = Path(__file__).resolve().parent.parent / "frontend"
     frontend = FrontendServer(
@@ -54,7 +55,6 @@ def main() -> None:
     )
 
     communicator.start()
-    check_startup_device_states(communicator, device_state_checker)
 
     frontend.start()
     print(f"Frontend available at {frontend.url}")
@@ -84,34 +84,30 @@ def handle_message(
     runtime_manager.dispatch_message(topic, payload)
 
 
-def check_startup_device_states(communicator: Communicator, checker: DeviceStateChecker | None) -> None:
-    """Run the startup device-state check and print its result."""
-    if execute_device_state_check(communicator, checker):
-        print("Device startup state check passed.")
-
-
-def execute_device_state_check(communicator: Communicator, checker: DeviceStateChecker | None) -> bool:
+def execute_device_state_check(
+    checker: DeviceStateChecker | None,
+    request_state: Callable[[], None] | None = None,
+) -> bool:
     """Ask devices for state and return whether configured responses match."""
     if checker is None:
         print("No device state config found; skipping device state check.")
         return True
 
     checker.start()
-    communicator.send_message(device_state_config.request_topic, device_state_config.request_payload)
-    checker.wait(timeout=2)
+    if request_state is not None:
+        request_state()
+    result = checker.wait(timeout=2)
 
-    missing, mismatched = checker.result()
-
-    if not missing and not mismatched:
+    if result.passed:
         return True
 
     print("Device state check failed.")
 
-    for expected in missing:
-        print(f"Missing state: {expected.topic} expected {expected.expected_value}")
-
-    for expected, actual in mismatched:
-        print(f"Mismatched state: {expected.topic} expected {expected.expected_value}, got {actual}")
+    for issue in result.issues:
+        if issue.status == "missing":
+            print(f"Missing state: {issue.topic} expected {issue.expected}")
+        elif issue.status == "mismatched":
+            print(f"Mismatched state: {issue.topic} expected {issue.expected}, got {issue.actual}")
 
     return False
 

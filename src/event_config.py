@@ -100,6 +100,7 @@ def _event_from_config(raw_event: dict[str, Any]) -> Event:
         payload=first_message.payload if first_message is not None else None,
         conditions=_condition_from_config(raw_event.get("condition")),
         messages=messages,
+        incoming=raw_event.get("incoming", True),
     )
 
 
@@ -176,7 +177,7 @@ def _encode_payload(payload: Any) -> bytes | None:
 
 def _topics_for_event(event: Event) -> tuple[str, ...]:
     """Return the canonical topic that can trigger an event."""
-    return (event.topic,) if event.topic else ()
+    return (event.topic,) if event.incoming and event.topic else ()
 
 
 def _condition_from_config(raw_condition: Any) -> tuple[PayloadCondition, ...]:

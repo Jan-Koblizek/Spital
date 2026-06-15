@@ -13,15 +13,19 @@ from config import device_state_config
 from interfaces import PayloadCondition
 
 
-DeviceStateCheckExecutor = Callable[[], bool]
+DeviceStateRequest = Callable[[], None]
+"""Function that asks devices to publish their current state."""
+
+
+DeviceStateCheckExecutor = Callable[[DeviceStateRequest | None], bool]
 """Function that performs a configured device-state check."""
 
 
 class DeviceStateChecks:
     """Static access point for running configured device-state checks.
 
-    Location code can call `DeviceStateChecks.check()` without receiving any
-    runtime-specific helper through `process_event`.
+    Location code passes the action that asks devices to publish their state;
+    the checker only collects and validates the responses.
     """
 
     _executor: ClassVar[DeviceStateCheckExecutor | None] = None
@@ -32,13 +36,13 @@ class DeviceStateChecks:
         cls._executor = executor
 
     @classmethod
-    def check(cls) -> bool:
+    def check(cls, request_state: DeviceStateRequest | None = None) -> bool:
         """Run the configured device-state check and return whether it passed."""
         if cls._executor is None:
             print("Device state check is not configured.")
             return True
 
-        return cls._executor()
+        return cls._executor(request_state)
 
 
 @dataclass(frozen=True)
@@ -151,7 +155,7 @@ class DeviceStateChecker:
             if self._expected_topics <= self._received.keys():
                 self._done.set()
 
-    def wait(self, timeout: float = 2.0) -> bool:
+    def wait(self, timeout: float = 2.0) -> DeviceStateCheckResult:
         """Wait for all configured states or until timeout."""
         self._done.wait(timeout)
 
@@ -161,13 +165,12 @@ class DeviceStateChecker:
             self._active = False
             self._last_result = result
 
-        return self.passed
+        return result
 
     @property
     def passed(self) -> bool:
         """Return whether all expected states arrived and matched."""
-        missing, mismatched = self.result()
-        return not missing and not mismatched
+        return self.current_result().passed
 
     def result(self) -> tuple[list[ExpectedDeviceState], list[tuple[ExpectedDeviceState, str | None]]]:
         """Return missing and mismatched states."""

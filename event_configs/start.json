@@ -11,9 +11,10 @@
     {
       "id": "kontrola",
       "name": "Kontrola před zahájením.",
-      "topic": "spital/start/spinac_zahajeni",
+      "topic": "spital/state/request",
       "description": "Příprava na novou tour - zkontroluj, že je všechno v počátečním stavu.",
-      "payload": "1"
+      "payload": "1",
+      "incoming": false
     },
     {
       "id": "tour_start",
