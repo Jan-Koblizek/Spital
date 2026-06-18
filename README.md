@@ -38,6 +38,51 @@ Polozky:
 - `payload`: hodnota odeslana pri spusteni udalosti z kodu nebo frontendu.
 - `condition`: volitelna podminka pro prichozi payload.
 - `incoming`: volitelne; `false` znamena, ze udalost lze spustit z kodu nebo frontendu, ale prichozi MQTT zprava ji nespusti.
+- `macro`: volitelne; vygeneruje cast odchozich MQTT zprav podle sdilene konfigurace v `event_configs/macros.json`.
+- `media_end`: volitelne; `true` automaticky vytvori prichozi udalost `<id>_off` na sdilenem topicu pro konce medii.
+
+Makro pro zamerene svetlo nastavi vsechna nakonfigurovana svetla na tlumenou hodnotu a jedno vybrane svetlo na maximum:
+
+```json
+{
+  "id": "focus_light_example",
+  "name": "Zamer svetlo 3",
+  "macro": {
+    "focus_light": "3"
+  },
+  "incoming": false
+}
+```
+
+Makra lze kombinovat. Tohle nastavi jas i barvu vsech svetel:
+
+```json
+{
+  "id": "set_all_lights_example",
+  "name": "Nastav vsechna svetla",
+  "macro": {
+    "all_light_brightness": "100",
+    "all_light_color": "#FFD6AA"
+  },
+  "incoming": false
+}
+```
+
+Seznam svetel se nastavuje jednou v `event_configs/macros.json` v casti `lights`. Jednotliva makra v casti `macros` na tento seznam odkazuji pres `topic_group`.
+
+Konce videa nebo zvuku lze generovat bez rucni udalosti:
+
+```json
+{
+  "id": "intro_video",
+  "name": "Intro video",
+  "topic": "spital/video",
+  "payload": "intro.mp4",
+  "media_end": true
+}
+```
+
+Program tim automaticky vytvori udalost `intro_video_off`. Zarizeni oznamuje konec media na topicu `media_end_topic` z `event_configs/macros.json`; payload je standardne id puvodni udalosti, tady `intro_video`.
 
 Jedna udalost muze odeslat i vice MQTT zprav. `topic` muze byt jeden topic nebo seznam topicu. `payload` muze byt jedna hodnota nebo seznam dvojic `[payload, zpozdeni_v_sekundach]`.
 

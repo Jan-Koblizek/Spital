@@ -1,0 +1,59 @@
+{
+  "location": "obchod_stoleti",
+  "events": [
+    {
+      "id": "obchod_stoleti_video1",
+      "name": "Obchod Století - Pocatecni Video",
+      "topic": [
+        "pi/media/command",
+        "pi/media/command"
+      ],
+      "payload": [
+        ["start;obchod_stoleti_video1_video;obchod_stoleti_start.mp4", 30],
+        ["start;obchod_stoleti_video1_sound;obchod_stoleti_start.wav", 30]
+      ],
+      "macro": {
+        "focus_light": "3"
+      },
+      "media_end": true,
+      "media_end_id": "obchod_stoleti_video1_video"
+    },
+    {
+      "id": "obchod_stoleti_sound2",
+      "name": "Obchod Století - Zvuk 2",
+      "topic": "pi/media/command",
+      "payload": "start;obchod_stoleti_sound2;obchod_stoleti2.wav",
+      "media_end": true
+    },
+   {
+      "id": "obchod_stoleti_music_loop",
+      "name": "Obchod Století - Loop Hudba",
+      "topic": [
+        "pi/media/command"
+      ],
+      "payload": [
+        ["start;obchod_stoleti_music_loop;obchod_stoleti3.wav", 0]
+      ],
+      "media_end": true
+    },
+    {
+      "id": "obchod_stoleti_tlacitko1",
+      "name": "Prvni Tlacitko",
+      "topic": "spital/obchod_stoleti/tlacitko1",
+      "description": "Zmáčknuto tlačítko",
+      "payload": "1",
+      "condition": "1"
+    },
+    {
+      "id": "obchod_stoleti_sound4",
+      "name": "Obchod Století - Zvuk 4",
+      "topic": "pi/media/command",
+      "payload": "start;obchod_stoleti_sound4;obchod_stoleti4.wav",
+      "media_end": true
+    },
+    {
+      "id": "obchod_stoleti_next",
+      "name": "Obchod Stoleti - Next"
+    }
+  ]
+}

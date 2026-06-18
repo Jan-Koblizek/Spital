@@ -1,0 +1,106 @@
+﻿{
+  "location": "zivot_poddanych",
+  "events": [
+    {
+      "id": "zivot_poddanych_sound1",
+      "name": "Å½ivot PoddanÃ½ch - Pocatecni Zvuk",
+      "topic": [
+        "pi/media/command"
+      ],
+      "payload": [
+        ["start;zivot_poddanych_sound1;zivot_poddanych_start.wav", 30]
+      ],
+      "macro": {
+        "focus_light": "6"
+      },
+      "media_end": true
+    },
+    {
+      "id": "zivot_poddanych_music_loop",
+      "name": "Å½ivot PoddanÃ½ch - Loop Hudba",
+      "topic": [
+        "pi/media/command"
+      ],
+      "payload": [
+        ["start;zivot_poddanych_music_loop;zivot_poddanych_music.wav", 0]
+      ],
+      "media_end": true
+    },
+    {
+      "id": "zivot_poddanych_tlacitko1",
+      "name": "Prvni Tlacitko",
+      "topic": "spital/zivot_poddanych/tlacitko1",
+      "description": "Spojeni cislo 1 spravne",
+      "payload": "1",
+      "condition": "1"
+    },
+    {
+      "id": "zivot_poddanych_tlacitko2",
+      "name": "Druhe Tlacitko",
+      "topic": "spital/zivot_poddanych/tlacitko2",
+      "description": "Spojeni cislo 2 spravne",
+      "payload": "1",
+      "condition": "1"
+    },
+    {
+      "id": "zivot_poddanych_tlacitko3",
+      "name": "Treti Tlacitko",
+      "topic": "spital/zivot_poddanych/tlacitko3",
+      "description": "Spojeni cislo 3 spravne",
+      "payload": "1",
+      "condition": "1"
+    },
+    {
+      "id": "zivot_poddanych_tlacitko4",
+      "name": "Ctvrte Tlacitko",
+      "topic": "spital/zivot_poddanych/tlacitko4",
+      "description": "Spojeni cislo 4 spravne",
+      "payload": "1",
+      "condition": "1"
+    },
+    {
+      "id": "zivot_poddanych_tlacitko5",
+      "name": "Pate Tlacitko",
+      "topic": "spital/zivot_poddanych/tlacitko5",
+      "description": "Spojeni cislo 5 spravne",
+      "payload": "1",
+      "condition": "1"
+    },
+    {
+      "id": "zivot_poddanych_tlacitko6",
+      "name": "SestÃ© Tlacitko",
+      "topic": "spital/zivot_poddanych/tlacitko6",
+      "description": "Spojeni cislo 6 spravne",
+      "payload": "1",
+      "condition": "1"
+    },
+    {
+      "id": "zivot_poddanych_tlacitko7",
+      "name": "SedmÃ© Tlacitko",
+      "topic": "spital/zivot_poddanych/tlacitko7",
+      "description": "Spojeni cislo 7 spravne",
+      "payload": "1",
+      "condition": "1"
+    },
+    {
+      "id": "zivot_poddanych_sound2",
+      "name": "Zivot Poddanych - Povidani 2",
+      "topic": "pi/media/command",
+      "payload": "start;zivot_poddanych_sound2;zivot_poddanych2.wav",
+      "media_end": true
+    },
+    {
+      "id": "zivot_poddanych_sound3",
+      "name": "Zivot Poddanych - Povidani 3",
+      "topic": "pi/media/command",
+      "payload": "start;zivot_poddanych_sound3;zivot_poddanych3.wav",
+      "media_end": true
+    },
+    {
+      "id": "zivot_poddanych_next",
+      "name": "Zivot Poddanych - Dalsi"
+    }
+  ]
+}
+
+

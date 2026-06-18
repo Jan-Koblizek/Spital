@@ -1,0 +1,49 @@
+{
+  "location": "jerab",
+  "events": [
+    {
+      "id": "jerab_sound1",
+      "name": "Jerab - Pocatecni Zvuk",
+      "topic": [
+        "pi/media/command"
+      ],
+      "payload": [
+        ["start;jerab_sound1;jerab_start.wav", 40]
+      ],
+      "macro": {
+        "focus_light": "5"
+      },
+      "media_end": true
+    },
+    {
+      "id": "jerab_music_loop",
+      "name": "Jerab - Loop Hudba",
+      "topic": [
+        "pi/media/command"
+      ],
+      "payload": [
+        ["start;jerab_music_loop;jerab_music.wav", 0]
+      ],
+      "media_end": true
+    },
+    {
+      "id": "jerab_tlacitko1",
+      "name": "Prvni Tlacitko",
+      "topic": "spital/jerab/tlacitko1",
+      "description": "Zeď postavena",
+      "payload": "1",
+      "condition": "1"
+    },
+    {
+      "id": "jerab_sound4",
+      "name": "Jerab - Povidani 4",
+      "topic": "pi/media/command",
+      "payload": "start;jerab_sound4;jerab4.wav",
+      "media_end": true
+    },
+    {
+      "id": "jerab_next",
+      "name": "Jerab - Další"
+    }
+  ]
+}

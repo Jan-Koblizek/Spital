@@ -14,15 +14,31 @@ from device_state import DeviceStateChecker, DeviceStateChecks, load_device_stat
 from event_config import EVENTS_BY_ID, EVENTS_BY_TOPIC, reload_events
 from frontend_server import FrontendServer
 from interfaces import Event
-from locations import Start, StartEvents, TricetValkaEvents
+from locations import (
+    AdolfEvents,
+    JerabEvents,
+    ObchodStoletiEvents,
+    SinPredkuEvents,
+    Start,
+    StartEvents,
+    TricetValkaEvents,
+    ZalozeniSpitaluEvents,
+    ZivotPoddanychEvents,
+)
 from runtime import EscapeRoomRuntime, OutboundEventSender
 
 
 # Tour wiring: change these when the tour starts or ends somewhere else.
-START_EVENT_ID = StartEvents.INIT
+START_EVENT_ID = StartEvents.START
 START_LOCATION = Start
 END_EVENT_IDS = {
     TricetValkaEvents.NEXT,
+    AdolfEvents.NEXT,
+    ObchodStoletiEvents.NEXT,
+    ZalozeniSpitaluEvents.NEXT,
+    JerabEvents.NEXT,
+    ZivotPoddanychEvents.NEXT,
+    SinPredkuEvents.END,
 }
 
 RUNTIME_CREATE_COOLDOWN = timedelta(minutes=1)

@@ -162,7 +162,7 @@ class EscapeRoomRuntime:
         event_definition = self._event_for_message(topic, payload)
 
         if event_definition is None:
-            print(f"Unknown MQTT topic: {topic}")
+            #print(f"Unknown MQTT topic: {topic}")
             return False
 
         return self._apply_event(event_definition, payload)
@@ -184,7 +184,7 @@ class EscapeRoomRuntime:
             if event.conditions_match(payload):
                 return event
 
-        print(f"No matching event for topic: {topic}")
+        #print(f"No matching event for topic: {topic}")
         return None
 
     def _process_event(self, event: Event) -> bool:

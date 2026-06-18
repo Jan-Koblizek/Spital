@@ -2,25 +2,35 @@
   "location": "start",
   "events": [
     {
-      "id": "init",
-      "name": "Nová skupina",
-      "topic": "spital/start/start",
-      "description": "Přišla nová skupina - bude potřeba udělat kontrolu a spustit prohlídku",
-      "payload": "1"
-    },
-    {
-      "id": "kontrola",
-      "name": "Kontrola před zahájením.",
-      "topic": "spital/state/request",
-      "description": "Příprava na novou tour - zkontroluj, že je všechno v počátečním stavu.",
-      "payload": "1",
-      "incoming": false
-    },
-    {
       "id": "tour_start",
       "name": "Zacatek Tour",
       "topic": "spital/start/spinac_zahajeni",
       "description": "Průvodce spouští escape room",
+      "payload": "1",
+      "condition": "1"
+    },
+    {
+      "id": "start_mp3",
+      "name": "Zahájovací MP3",
+      "topic": "pi/media/command",
+      "description": "Spuštění počáteční sekvence mp3.",
+      "payload": "start;start_mp3;mp3_1.mp3",
+      "media_end": true
+    },
+    {
+      "id": "start_lights",
+      "name": "Zahajovaci svetla",
+      "description": "Rozsviceni po konci zahajovaci MP3.",
+      "macro": {
+        "all_light_brightness": "100",
+        "all_light_color": "#FFD6AA"
+      }
+    },
+    {
+      "id": "start_next",
+      "name": "Přesun 30 let válka",
+      "topic": "spital/start/next",
+      "description": "Přesun do sekce třicetiletá válka",
       "payload": "1",
       "condition": "1"
     }

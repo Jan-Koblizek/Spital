@@ -1,0 +1,39 @@
+{
+  "location": "sin_predku",
+  "events": [
+    {
+      "id": "sin_predku_sound1",
+      "name": "Sin Předku - Pocatecni Promluva",
+      "topic": [
+        "pi/media/command"
+      ],
+      "payload": [
+        ["start;sin_predku_sound1;sin_predku.mp3", 30]
+      ],
+      "media_end": true
+    },
+    {
+      "id": "sin_predku_music",
+      "name": "Sin Předku - Hudba",
+      "topic": [
+        "pi/media/command"
+      ],
+      "payload": [
+        ["start;sin_predku_music;sin_predku_music.mp3", 0]
+      ],
+      "media_end": true
+    },
+    {
+      "id": "kontrola",
+      "name": "Kontrola Po ukončení.",
+      "topic": "spital/state/request",
+      "description": "Příprava na novou tour - zkontroluj, že je všechno v počátečním stavu.",
+      "payload": "1",
+      "incoming": false
+    },
+    {
+      "id": "sin_predku_end",
+      "name": "Sin Predku - Konec Runtime"
+    }
+  ]
+}

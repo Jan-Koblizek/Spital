@@ -2,107 +2,106 @@
   "location": "tricet_valka",
   "events": [
     {
-      "id": "tricet_valka_konec",
-      "name": "Konečná Sekvence",
+      "id": "tricet_valka_video1",
+      "name": "Tricetileta Valka - Pocatecni Video",
       "topic": [
-        "spital/30_valka/uv", 
-        "spital/30_valka/rgb/brightness", 
-        "spital/30_valka/rgb/rgb",
-        "spital/30_valka/mp3_2",
-        "spital/30valka/next"
+        "pi/media/command",
+        "pi/media/command"
       ],
-      "description": "Pusť video, zahasni UV, rosviť RGB, ukonči lokaci",
       "payload": [
-        ["0", 0],
-        ["0.25", 0],
-        ["#FFAAAA",0.1],
-        ["30valka.wav", 0.5],
-        ["1", 20]
-      ]
+        ["start;tricet_valka_video1_video;30valka_start.mp4", 0],
+        ["start;tricet_valka_video1_sound;30valka_start.wav", 0]
+      ],
+      "macro": {
+        "all_light_brightness": "30",
+        "all_light_color": "#FF0000"
+      },
+      "media_end": true,
+      "media_end_id": "tricet_valka_video1_video"
+    },
+    {
+      "id": "tricet_valka_video2",
+      "name": "Tricetileta Valka - Video 2",
+      "topic": [
+        "pi/media/command",
+        "pi/media/command"
+      ],
+      "payload": [
+        ["start;tricet_valka_video2_video;30valka_video2.mp4", 0],
+        ["start;tricet_valka_video2_sound;30valka_sound2.wav", 0]
+      ],
+      "macro": {
+        "all_light_brightness": "100",
+        "all_light_color": "#FFD6AA"
+      },
+      "media_end": true,
+      "media_end_id": "tricet_valka_video2_video"
+    },
+    {
+      "id": "tricet_valka_sound3",
+      "name": "Tricetileta Valka - Zvuk 3",
+      "topic": [
+        "pi/media/command",
+        "spital/uv/1"
+      ],
+      "payload": [
+        ["start;tricet_valka_sound3;30valka_sound3.wav", 0],
+        ["100", 0]
+      ],
+      "macro": {
+        "all_light_brightness": "0"
+      },
+      "media_end": true
+    },
+    {
+      "id": "tricet_valka_music_loop",
+      "name": "Tricetileta Valka - Loop Hudba",
+      "topic": [
+        "pi/media/command"
+      ],
+      "payload": [
+        ["start;tricet_valka_music_loop;30valka_sound4.wav", 0]
+      ],
+      "media_end": true
     },
     {
       "id": "tricet_valka_tlacitko1",
-      "name": "První Tlačítko",
+      "name": "Prvni Tlacitko",
       "topic": "spital/30_valka/tlacitko1",
-      "description": "Dítě zmáčklo tlačítko",
+      "description": "Dite zmacklo tlacitko",
       "payload": "1",
       "condition": "1"
     },
     {
       "id": "tricet_valka_tlacitko2",
-      "name": "Druhé Tlačítko",
+      "name": "Druhe Tlacitko",
       "topic": "spital/30_valka/tlacitko2",
-      "description": "Dosplělý zmáčkl tlačítko",
+      "description": "Dospely zmackl tlacitko",
       "payload": "1",
       "condition": "1"
     },
     {
-      "id": "30_valka_uv",
-      "name": "Nahoď UV pásek",
-      "topic": "spital/30valka/uv",
-      "description": "Zapni UV pásek",
-      "payload": "1"
-    },
-    {
-      "id": "30_valka_uv_off",
-      "name": "Vypni UV pásek",
-      "topic": "spital/30valka/uv",
-      "description": "Vypni UV pásek",
-      "payload": "0"
-    },
-    {
-      "id": "tricet_valka_mp3",
-      "name": "MP3 Třicetiletá Válka",
-      "topic": "spital/rpi_obraz_zvuk/1",
-      "description": "Spusť MP3 povídání ke 30 leté válce",
-      "payload": "30valka.mp3"
-    },
-    {
-      "id": "tricet_valka_mp3_2",
-      "name": "MP3 Třicetiletá Válka - 2",
-      "topic": "spital/rpi_obraz_zvuk/2",
-      "description": "Spusť druhé MP3 povídání ke 30 leté válce",
-      "payload": "30valka_2.mp3"
-    },
-    {
-      "id": "tricet_valka_mp3_3",
-      "name": "MP3 Třicetiletá Válka - 3",
-      "topic": "spital/rpi_obraz_zvuk/3",
-      "description": "Spusť MP3 po dokončení úkolu",
-      "payload": "30valka_3.mp3"
-    },
-    {
-      "id": "tricet_valka_video",
-      "name": "Video Třicetiletá Válka",
-      "topic": "spital/tv_1_01",
-      "description": "Spusť Video ke 30 leté válce",
-      "payload": "30valka.wav;30valkamp3"
-    },
-    {
-      "id": "tricet_valka_light",
-      "name": "Nastav Barevné Světlo",
-      "topic": "spital/30valka/rgb",
-      "description": "Nastav intenzitu a barvu RGB světla",
+      "id": "tricet_valka_sound4",
+      "name": "Tricetileta Valka - Zvuk 4",
+      "description": "Spust Zvuk 4, zapni svetla",
+      "topic": [
+        "pi/media/command",
+        "spital/uv/1"
+      ],
       "payload": [
-        ["", 0],
-        ["", 0]
-      ]
-    },
-    {
-      "id": "tricet_valka_light_off",
-      "name": "Vypni Barevné Světlo",
-      "topic": "spital/30valka/rgb",
-      "description": "Vypni intenzitu a barvu RGB světla",
-      "payload": [
-        ["", 0],
-        ["", 0]
-      ]
+        ["start;tricet_valka_sound4;30valka_sound4.wav", 0],
+        ["0", 0]
+      ],
+      "macro": {
+        "focus_light": "1"
+      },
+      "media_end": true
     },
     {
       "id": "tricet_next",
-      "name": "Další Scéna",
+      "name": "Dalsi Scena",
       "topic": "spital/30valka/next",
-      "description": "Přejdi do scény Adolf."
+      "description": "Prejdi do sceny Adolf."
     }
   ]
 }
