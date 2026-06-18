@@ -1,118 +1,85 @@
-"""List of all locations - can be separated into more files if desired."""
+"""Public import surface for all location classes and event enums.
 
-from datetime import datetime
-from enum import Enum
-from threading import Timer
+The actual implementations live in `src/locations/*.py`. This module stays in
+place so existing scripts can continue using `from locations import ...`.
+"""
 
-from interfaces import Location, SendEvent
-from device_state import DeviceStateChecks
-        
-        
-class StartEvents(str, Enum):
-    INIT = "init"
-    KONTROLA = "kontrola"
-    START = "tour_start"
-    
-    
-class Start(Location):
-    
-    name = "Před Prohlídkou"
-    config_id = "start"
-    
-    def enter_location(self, send_event: SendEvent):
-        """Initialize the location and run the initial device-state check."""
-        self.zkontrolovano = self._check_initial_state(send_event)
-    
-    def process_event(
-        self,
-        event_id: str,
-        payload: str | None,
-        send_event: SendEvent,
-    ) -> Location:
-        """React to configured events for this location.
+from __future__ import annotations
 
-        Args:
-            event_id (str): id of the event we are reacting to
-            payload (str | None): decoded event payload
-            send_event (SendEvent): function that can be used to send event
-
-        Returns:
-            Location: new location (or self if location didn't change)
-        """
-        if event_id == StartEvents.KONTROLA:
-            self.zkontrolovano = self._check_initial_state(send_event)
-        if event_id == StartEvents.START and self.zkontrolovano:
-            return self.change_location(TricetValka(), send_event)
-        return self
-
-    def _check_initial_state(self, send_event: SendEvent) -> bool:
-        """Ask devices for state and wait for their configured responses."""
-        return DeviceStateChecks.check(lambda: send_event(StartEvents.KONTROLA))
-    
+import importlib.util
+from pathlib import Path
+from types import ModuleType
 
 
-class TricetValkaEvents(str, Enum):
-    """Event ids used by the Tricet Valka location.
-
-    Values must match ids from `event_configs/tricet_valka.json`.
-    """
-
-    TLACITKO1 = "tricet_valka_tlacitko1"
-    TLACITKO2 = "tricet_valka_tlacitko2"
-    VALKA_UV = "30_valka_uv"
-    VALKA_UV_OFF = "30_valka_uv_off"
-    MP3 = "tricet_valka_mp3"
-    MP3_2 = "tricet_valka_mp3_2"
-    MP3_3 = "tricet_valka_mp3_3"
-    VIDEO = "tricet_valka_video"
-    LIGHT = "tricet_valka_light"
-    LIGHT_OFF = "tricet_valka_light_off"
-    TOUR_START = "tour_start"
-    KONEC = "tricet_valka_konec"
-    NEXT = "tricet_next"
+_LOCATION_DIR = Path(__file__).resolve().with_suffix("")
 
 
-class TricetValka(Location):
-    """Stanoviště Tricetileta Valka"""
-    
-    name = "Třicetiletá Válka"
-    config_id = "tricet_valka"
-    
-    def enter_location(self, send_event: SendEvent):
-        """Initialize button timing and start introductory media."""
-        self.tlacitko1_time = datetime.fromtimestamp(0)
-        self.tlacitko2_time = datetime.fromtimestamp(0)
-        send_event(TricetValkaEvents.MP3)
-        Timer(180, lambda: send_event(TricetValkaEvents.VIDEO)).start()
-        
-    def process_event(
-        self,
-        event_id: str,
-        payload: str | None,
-        send_event: SendEvent,
-    ) -> Location:
-        """React to configured events for this location.
+def _load_location_module(name: str) -> ModuleType:
+    module_path = _LOCATION_DIR / f"{name}.py"
+    spec = importlib.util.spec_from_file_location(f"_spital_locations_{name}", module_path)
 
-        Args:
-            event_id (str): id of the event we are reacting to
-            payload (str | None): decoded event payload
-            send_event (SendEvent): function that can be used to send event
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Cannot load location module: {module_path}")
 
-        Returns:
-            Location: new location (or self if location didn't change)
-        """
-        if event_id == TricetValkaEvents.TLACITKO1:
-            self.tlacitko1_time = datetime.now()
-            if (self.tlacitko1_time - self.tlacitko2_time).total_seconds() < 2:
-                send_event(TricetValkaEvents.KONEC)
-                
-        if event_id == TricetValkaEvents.TLACITKO2:
-            self.tlacitko2_time = datetime.now()
-            if (self.tlacitko2_time - self.tlacitko1_time).total_seconds() < 2:
-                send_event(TricetValkaEvents.KONEC)
-                         
-        if event_id == TricetValkaEvents.NEXT:
-            print("changing locations")
-            return self.change_location(Adolf(), send_event)
-        
-        return self
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+_start = _load_location_module("start")
+_tricet_valka = _load_location_module("tricet_valka")
+_adolf = _load_location_module("adolf")
+_obchod_stoleti = _load_location_module("obchod_stoleti")
+_zalozeni_spitalu = _load_location_module("zalozeni_spitalu")
+_jerab = _load_location_module("jerab")
+_zivot_poddanych = _load_location_module("zivot_poddanych")
+_sin_predku = _load_location_module("sin_predku")
+_finished = _load_location_module("finished")
+
+
+StartEvents = _start.StartEvents
+Start = _start.Start
+
+TricetValkaEvents = _tricet_valka.TricetValkaEvents
+TricetValka = _tricet_valka.TricetValka
+
+AdolfEvents = _adolf.AdolfEvents
+Adolf = _adolf.Adolf
+
+ObchodStoletiEvents = _obchod_stoleti.ObchodStoletiEvents
+ObchodStoleti = _obchod_stoleti.ObchodStoleti
+
+ZalozeniSpitaluEvents = _zalozeni_spitalu.ZalozeniSpitaluEvents
+ZalozeniSpitalu = _zalozeni_spitalu.ZalozeniSpitalu
+
+JerabEvents = _jerab.JerabEvents
+Jerab = _jerab.Jerab
+
+ZivotPoddanychEvents = _zivot_poddanych.ZivotPoddanychEvents
+ZivotPoddanych = _zivot_poddanych.ZivotPoddanych
+
+SinPredkuEvents = _sin_predku.SinPredkuEvents
+SinPredku = _sin_predku.SinPredku
+
+Finished = _finished.Finished
+
+
+__all__ = [
+    "StartEvents",
+    "Start",
+    "TricetValkaEvents",
+    "TricetValka",
+    "AdolfEvents",
+    "Adolf",
+    "ObchodStoletiEvents",
+    "ObchodStoleti",
+    "ZalozeniSpitaluEvents",
+    "ZalozeniSpitalu",
+    "JerabEvents",
+    "Jerab",
+    "ZivotPoddanychEvents",
+    "ZivotPoddanych",
+    "SinPredkuEvents",
+    "SinPredku",
+    "Finished",
+]
