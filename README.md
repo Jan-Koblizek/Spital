@@ -68,6 +68,29 @@ Makra lze kombinovat. Tohle nastavi jas i barvu vsech svetel:
 }
 ```
 
+Makro muze mit i zpozdeni. Kratsi zapis je `[hodnota, zpozdeni_v_sekundach]`:
+
+```json
+{
+  "id": "delayed_lights_example",
+  "name": "Zpozdena svetla",
+  "macro": {
+    "all_light_brightness": ["250", 2],
+    "all_light_color": ["#FFD6AA", 2]
+  },
+  "incoming": false
+}
+```
+
+Stejne jde pouzit citelnejsi objektovy zapis:
+
+```json
+"all_light_power": {
+  "value": "1",
+  "delay": 2
+}
+```
+
 Seznam svetel se nastavuje jednou v `event_configs/macros.json` v casti `lights`. Jednotliva makra v casti `macros` na tento seznam odkazuji pres `topic_group`.
 
 Konce videa nebo zvuku lze generovat bez rucni udalosti:
@@ -83,6 +106,20 @@ Konce videa nebo zvuku lze generovat bez rucni udalosti:
 ```
 
 Program tim automaticky vytvori udalost `intro_video_off`. Zarizeni oznamuje konec media na topicu `media_end_topic` z `event_configs/macros.json`; payload je standardne id puvodni udalosti, tady `intro_video`.
+
+Kdyz se udalost `<id>_off` spusti z frontendu nebo z kodu, program posle odpovidajici stop prikaz na puvodni media command topic. Ze start prikazu:
+
+```json
+"payload": "start;intro_video;intro.mp4"
+```
+
+se pro `_off` udalost automaticky vytvori:
+
+```text
+stop;intro_video;intro.mp4
+```
+
+Rucni spusteni `_off` udalosti ve frontendu posle stop prikaz a zaroven pokracuje v logice lokace stejne jako skutecna MQTT zprava o dokonceni media.
 
 Jedna udalost muze odeslat i vice MQTT zprav. `topic` muze byt jeden topic nebo seznam topicu. `payload` muze byt jedna hodnota nebo seznam dvojic `[payload, zpozdeni_v_sekundach]`.
 

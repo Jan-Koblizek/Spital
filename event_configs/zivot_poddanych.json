@@ -3,12 +3,12 @@
   "events": [
     {
       "id": "zivot_poddanych_sound1",
-      "name": "Å½ivot PoddanÃ½ch - Pocatecni Zvuk",
+      "name": "Život Poddaných - Pocatecni Zvuk",
       "topic": [
-        "pi/media/command"
+        "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;zivot_poddanych_sound1;zivot_poddanych_start.wav", 30]
+        ["start;zivot_poddanych_sound1;media/6_1.wav", 10]
       ],
       "macro": {
         "focus_light": "6"
@@ -17,83 +17,51 @@
     },
     {
       "id": "zivot_poddanych_music_loop",
-      "name": "Å½ivot PoddanÃ½ch - Loop Hudba",
+      "name": "Život Poddaných - Loop Hudba",
       "topic": [
-        "pi/media/command"
+        "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;zivot_poddanych_music_loop;zivot_poddanych_music.wav", 0]
+        ["start;zivot_poddanych_music_loop;media/6_2.wav", 0]
       ],
       "media_end": true
     },
     {
-      "id": "zivot_poddanych_tlacitko1",
-      "name": "Prvni Tlacitko",
-      "topic": "spital/zivot_poddanych/tlacitko1",
-      "description": "Spojeni cislo 1 spravne",
-      "payload": "1",
-      "condition": "1"
-    },
-    {
-      "id": "zivot_poddanych_tlacitko2",
-      "name": "Druhe Tlacitko",
-      "topic": "spital/zivot_poddanych/tlacitko2",
-      "description": "Spojeni cislo 2 spravne",
-      "payload": "1",
-      "condition": "1"
-    },
-    {
-      "id": "zivot_poddanych_tlacitko3",
-      "name": "Treti Tlacitko",
-      "topic": "spital/zivot_poddanych/tlacitko3",
-      "description": "Spojeni cislo 3 spravne",
-      "payload": "1",
-      "condition": "1"
-    },
-    {
-      "id": "zivot_poddanych_tlacitko4",
-      "name": "Ctvrte Tlacitko",
-      "topic": "spital/zivot_poddanych/tlacitko4",
-      "description": "Spojeni cislo 4 spravne",
-      "payload": "1",
-      "condition": "1"
-    },
-    {
-      "id": "zivot_poddanych_tlacitko5",
-      "name": "Pate Tlacitko",
-      "topic": "spital/zivot_poddanych/tlacitko5",
-      "description": "Spojeni cislo 5 spravne",
-      "payload": "1",
-      "condition": "1"
-    },
-    {
-      "id": "zivot_poddanych_tlacitko6",
-      "name": "SestÃ© Tlacitko",
-      "topic": "spital/zivot_poddanych/tlacitko6",
-      "description": "Spojeni cislo 6 spravne",
-      "payload": "1",
-      "condition": "1"
-    },
-    {
-      "id": "zivot_poddanych_tlacitko7",
-      "name": "SedmÃ© Tlacitko",
-      "topic": "spital/zivot_poddanych/tlacitko7",
-      "description": "Spojeni cislo 7 spravne",
-      "payload": "1",
-      "condition": "1"
+      "id": "zivot_poddanych_tlacitko",
+      "name": "Truhla splnena",
+      "topic": "spital/switch/TRUHLA/button/0",
+      "description": "Spojeni v truhle spravne",
+      "payload": "pressed",
+      "condition": "pressed"
     },
     {
       "id": "zivot_poddanych_sound2",
-      "name": "Zivot Poddanych - Povidani 2",
-      "topic": "pi/media/command",
-      "payload": "start;zivot_poddanych_sound2;zivot_poddanych2.wav",
+      "name": "Život Poddaných - Povidani 2",
+      "topic": [
+        "spital/RPI-TV/media/command",
+        "spital/RPI-TV/media/command"
+      ],
+      "payload": [
+        ["stop;zivot_poddanych_music_loop;media/6_2.wav", 0],
+        ["start;zivot_poddanych_sound2;media/6_3.wav", 0]
+      ],
       "media_end": true
     },
     {
       "id": "zivot_poddanych_sound3",
       "name": "Zivot Poddanych - Povidani 3",
-      "topic": "pi/media/command",
-      "payload": "start;zivot_poddanych_sound3;zivot_poddanych3.wav",
+      "topic": [
+        "spital/RPI-TV/media/command",
+        "spital/DVERE/brightness/set",
+        "spital/DVERE/hex/set",
+        "spital/RELE/relay/0/set"
+      ],
+      "payload": [
+        ["start;zivot_poddanych_sound3;media/6_4.wav", 0],
+        ["250", 0],
+        ["#FFFFFF", 0],
+        ["1", 0]
+      ],
       "media_end": true
     },
     {

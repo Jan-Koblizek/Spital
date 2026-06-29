@@ -8,7 +8,7 @@
         "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;adolf_sound1;2_1.wav", 0]
+        ["start;adolf_sound1;media/2_1.wav", 0]
       ],
       "macro": {
         "focus_light": "2"
@@ -19,13 +19,15 @@
       "id": "adolf_video1",
       "name": "Adolf - Pocatecni Video",
       "topic": [
+        "spital/RPI-TV/media/command",
         "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;adolf_video1_video;TV2.mp4", 0]
+        ["start;adolf_video1_video;media/TV2.mp4", 0],
+        ["start;adolf_video1_sound;media/TV2.wav", 0]
       ],
       "media_end": true,
-      "media_end_id": "adolf_video1_video"
+      "media_end_id": "adolf_video1_sound"
     },
     {
       "id": "adolf_sound3",
@@ -36,9 +38,9 @@
         "spital/SKRIN2/brightness/set"
       ],
       "payload": [
-        ["start;adolf_sound3;2_2.wav", 0],
+        ["start;adolf_sound3;media/2_2.wav", 0],
         ["190", 0],
-        ["254", 0]
+        ["250", 0]
       ],
       "media_end": true
     },
@@ -49,7 +51,7 @@
         "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;adolf_music_loop;2_3.wav", 0]
+        ["start;adolf_music_loop;media/2_3.wav", 0]
       ],
       "media_end": true
     },
@@ -58,8 +60,8 @@
       "name": "Tlacitko3 - otevreno",
       "topic": "spital/switch/TLACITKO3/button/0",
       "description": "Suplik Skrin2 otevren",
-      "payload": "releassed",
-      "condition": "0"
+      "payload": "released",
+      "condition": "released"
     },
         {
       "id": "adolf_tlacitko1-0",
@@ -67,7 +69,7 @@
       "topic": "spital/switch/TLACITKO3/button/0",
       "description": "Suplik Skrin2 zavren",
       "payload": "pressed",
-      "condition": "1"
+      "condition": "pressed"
     },
     {
       "id": "adolf_sound4",
@@ -77,8 +79,8 @@
         "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["stop;adolf_music_loop;2_3.wav", 0],
-        ["start;adolf_sound4;2_4.wav", 1]
+        ["stop;adolf_music_loop;media/2_3.wav", 0],
+        ["start;adolf_sound4;media/2_4.wav", 1]
       ],
       "media_end": true
     },

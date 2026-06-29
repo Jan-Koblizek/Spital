@@ -5,10 +5,10 @@
       "id": "jerab_sound1",
       "name": "Jerab - Pocatecni Zvuk",
       "topic": [
-        "pi/media/command"
+        "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;jerab_sound1;jerab_start.wav", 40]
+        ["start;jerab_sound1;media/5_1.wav", 1]
       ],
       "macro": {
         "focus_light": "5"
@@ -19,26 +19,32 @@
       "id": "jerab_music_loop",
       "name": "Jerab - Loop Hudba",
       "topic": [
-        "pi/media/command"
+        "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;jerab_music_loop;jerab_music.wav", 0]
+        ["start;jerab_music_loop;media/5_2.wav", 0]
       ],
       "media_end": true
     },
     {
       "id": "jerab_tlacitko1",
       "name": "Prvni Tlacitko",
-      "topic": "spital/jerab/tlacitko1",
+      "topic": "spital/switch/VAHA/button/0",
       "description": "Zeď postavena",
-      "payload": "1",
-      "condition": "1"
+      "payload": "pressed",
+      "condition": "pressed"
     },
     {
       "id": "jerab_sound4",
       "name": "Jerab - Povidani 4",
-      "topic": "pi/media/command",
-      "payload": "start;jerab_sound4;jerab4.wav",
+      "topic": [
+        "spital/RPI-TV/media/command",
+        "spital/RPI-TV/media/command"
+      ],
+      "payload": [
+        ["stop;jerab_music_loop;media/5_2.wav", 0],
+        ["start;jerab_sound4;media/5_3.wav", 0]
+      ],
       "media_end": true
     },
     {

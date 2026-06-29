@@ -5,50 +5,60 @@
       "id": "zalozeni_spitalu_video1",
       "name": "Založení špitálu - Úvodní video",
       "topic": [
-        "pi/media/command",
-        "pi/media/command"
+        "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;zalozeni_spitalu_video1_video;zalozeni_spitalu_start.mp4", 30],
-        ["start;zalozeni_spitalu_video1_sound;zalozeni_spitalu_start.wav", 30]
+        ["start;zalozeni_spitalu_video1_video;media/TV4.mp4", 10]
       ],
       "macro": {
         "focus_light": "4"
       },
-      "media_end": true,
-      "media_end_id": "zalozeni_spitalu_video1_video"
+      "media_end": false
+    },
+    {
+      "id": "zalozeni_spitalu_sound1",
+      "name": "Založení špitálu - Úvodní zvuk",
+      "topic": [
+        "spital/RPI-TV/media/command"
+      ],
+      "payload": [
+        ["start;zalozeni_spitalu_video1_sound;media/4_1.wav", 10]
+      ],
+      "media_end": true
     },
     {
       "id": "zalozeni_spitalu_music_loop",
       "name": "Založení špitálu - Loop Hudba",
       "topic": [
-        "pi/media/command"
+        "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;zalozeni_spitalu_music_loop;zalozeni_spitalu_music.wav", 0]
+        ["start;zalozeni_spitalu_music_loop;media/4_2.wav", 0]
       ],
       "media_end": true
     },
     {
       "id": "zalozeni_spitalu_tlacitko1",
       "name": "Prvni Tlacitko",
-      "topic": "spital/zalozeni_spitalu/tlacitko1",
+      "topic": "spital/switch/TLACITKO5/button/0",
       "description": "Skříň otevřena",
-      "payload": "1",
-      "condition": "1"
+      "payload": "released",
+      "condition": "released"
     },
     {
       "id": "zalozeni_spitalu_sound2",
       "name": "Založení špitálu - Instrukce Skříň",
       "topic": [
-        "pi/media/command",
-        "spital/rgb/brightness/4",
-        "spital/rgb/brightness/9"
+        "spital/RPI-TV/media/command",
+        "spital/RPI-TV/media/command",
+        "spital/SV4/brightness/set",
+        "spital/SKRIN4/brightness/set"
       ],
       "payload": [
-        ["start;zalozeni_spitalu_sound2;zalozeni_spitalu_start.wav", 0],
-        ["70", 0],
-        ["100", 0]
+        ["stop;zalozeni_spitalu_music_loop;media/4_2.wav", 0],
+        ["start;zalozeni_spitalu_sound2;media/4_3.wav", 0],
+        ["190", 0],
+        ["250", 0]
       ],
       "media_end": true
     },
@@ -56,29 +66,33 @@
       "id": "zalozeni_spitalu_music_loop2",
       "name": "Založení špitálu - Loop Hudba 2",
       "topic": [
-        "pi/media/command"
+        "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;zalozeni_spitalu_music_loop2;zalozeni_spitalu_music2.wav", 0]
+        ["start;zalozeni_spitalu_music_loop2;media/4_4.wav", 0]
       ],
       "media_end": true
     },
     {
       "id": "zalozeni_spitalu_tlacitko2",
       "name": "Skříň Zavřená",
-      "topic": "spital/zalozeni_spitalu/tlacitko2",
+      "topic": "spital/switch/TLACITKO5/button/0",
       "description": "Skříň zavřena",
-      "payload": "1",
-      "condition": "1"
+      "payload": "pressed",
+      "condition": "pressed"
     },
     {
       "id": "zalozeni_spitalu_next",
       "name": "Založení špitálu - Next",
       "topic": [
-        "spital/rgb/brightness/8"
+        "spital/SKRIN4/brightness/set",
+        "spital/RPI-TV/media/command",
+        "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["0", 0]
+        ["0", 0],
+        ["stop;zalozeni_spitalu_music_loop2;media/4_4.wav", 0],
+        ["stop;zalozeni_spitalu_video1_video;media/TV4.mp4", 0]
       ]
     }
   ]

@@ -5,50 +5,56 @@
       "id": "obchod_stoleti_video1",
       "name": "Obchod Století - Pocatecni Video",
       "topic": [
-        "pi/media/command",
-        "pi/media/command"
+        "spital/RPI-TV/media/command",
+        "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;obchod_stoleti_video1_video;obchod_stoleti_start.mp4", 30],
-        ["start;obchod_stoleti_video1_sound;obchod_stoleti_start.wav", 30]
+        ["start;obchod_stoleti_video1_video;media/TV3.mp4", 10],
+        ["start;obchod_stoleti_video1_sound;media/TV3.wav", 10]
       ],
       "macro": {
         "focus_light": "3"
       },
       "media_end": true,
-      "media_end_id": "obchod_stoleti_video1_video"
+      "media_end_id": "obchod_stoleti_video1_sound"
     },
     {
       "id": "obchod_stoleti_sound2",
       "name": "Obchod Století - Zvuk 2",
-      "topic": "pi/media/command",
-      "payload": "start;obchod_stoleti_sound2;obchod_stoleti2.wav",
+      "topic": "spital/RPI-TV/media/command",
+      "payload": "start;obchod_stoleti_sound2;media/3_1.wav",
       "media_end": true
     },
-   {
+    {
       "id": "obchod_stoleti_music_loop",
       "name": "Obchod Století - Loop Hudba",
       "topic": [
-        "pi/media/command"
+        "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;obchod_stoleti_music_loop;obchod_stoleti3.wav", 0]
+        ["start;obchod_stoleti_music_loop;media/3_2.wav", 0]
       ],
       "media_end": true
     },
     {
       "id": "obchod_stoleti_tlacitko1",
       "name": "Prvni Tlacitko",
-      "topic": "spital/obchod_stoleti/tlacitko1",
+      "topic": "spital/switch/TLACITKO4/button/0",
       "description": "Zmáčknuto tlačítko",
-      "payload": "1",
-      "condition": "1"
+      "payload": "pressed",
+      "condition": "pressed"
     },
     {
       "id": "obchod_stoleti_sound4",
       "name": "Obchod Století - Zvuk 4",
-      "topic": "pi/media/command",
-      "payload": "start;obchod_stoleti_sound4;obchod_stoleti4.wav",
+      "topic": [
+        "spital/RPI-TV/media/command",
+        "spital/RPI-TV/media/command"
+      ],
+      "payload": [
+        ["stop;obchod_stoleti_music_loop;media/3_2.wav", 0],
+        ["start;obchod_stoleti_sound4;media/3_3.wav", 0]
+      ],
       "media_end": true
     },
     {

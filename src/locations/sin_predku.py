@@ -8,10 +8,8 @@ class SinPredkuEvents(str, Enum):
     """Event ids used by the Sin Predku location."""
 
     SOUND1 = "sin_predku_sound1"
-    SOUND1_OFF = "sin_predku_sound1_off"
-    MUSIC = "sin_predku_music"
-    MUSIC_OFF = "sin_predku_music_off"
-    KONTROLA = "kontrola"
+    LIGHTS_OFF = "turn_off_lights"
+    CLOUD_OFF = "turn_off_rele"
     END = "sin_predku_end"
 
 
@@ -26,6 +24,8 @@ class SinPredku(Location):
         self.phase = "sound1"
         self.state_checked = False
         send_event(SinPredkuEvents.SOUND1)
+        send_event(SinPredkuEvents.LIGHTS_OFF)
+        send_event(SinPredkuEvents.CLOUD_OFF)
 
     def process_event(
         self,
@@ -34,11 +34,7 @@ class SinPredku(Location):
         send_event: SendEvent,
     ) -> Location:
         """React to configured events for this location."""
-        if event_id == SinPredkuEvents.SOUND1_OFF and self.phase == "sound1":
-            self.phase = "music"
-            send_event(SinPredkuEvents.MUSIC)
-
-        if event_id == SinPredkuEvents.MUSIC_OFF and self.phase == "music":
+        if event_id == SinPredkuEvents.CLOUD_OFF:
             from locations import Finished
 
             self.state_checked = DeviceStateChecks.check(lambda: send_event(SinPredkuEvents.KONTROLA))

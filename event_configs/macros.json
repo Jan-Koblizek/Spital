@@ -8,6 +8,11 @@
       "5": "spital/SV5/brightness/set",
       "6": "spital/SV6/brightness/set"
     },
+    "skrin_brightness": {
+      "skrin2": "spital/SKRIN2/brightness/set",
+      "skrin4": "spital/SKRIN4/brightness/set",
+      "dvere": "spital/DVERE/brightness/set"
+    },
     "color": {
       "1": "spital/SV1/hex/set",
       "2": "spital/SV2/hex/set",
@@ -15,6 +20,18 @@
       "4": "spital/SV4/hex/set",
       "5": "spital/SV5/hex/set",
       "6": "spital/SV6/hex/set"
+    },
+    "power": {
+      "1": "spital/SV1/light/set",
+      "2": "spital/SV2/light/set",
+      "3": "spital/SV3/light/set",
+      "4": "spital/SV4/light/set",
+      "5": "spital/SV5/light/set",
+      "6": "spital/SV6/light/set",
+      "skrin2": "spital/SKRIN2/light/set",
+      "skrin4": "spital/SKRIN4/light/set",
+      "dvere": "spital/DVERE/light/set",
+      "uv": "spital/UV/light/set"
     }
   },
   "media_end_topic": "spital/RPI-TV/media/status",
@@ -22,14 +39,40 @@
   "macros": {
     "focus_light": {
       "topic_group": "brightness",
-      "dimmed": "10",
-      "max": "100"
+      "dimmed": "100",
+      "max": "250",
+      "color_topic_group": "color",
+      "colors": {
+        "1": "#FFB977",
+        "2": "#FFB977",
+        "3": "#FF9E38",
+        "4": "#FF9E38",
+        "5": "#FF9E38",
+        "6": "#FF9E38"
+      }
     },
     "all_light_brightness": {
       "topic_group": "brightness"
     },
+    "skrin_light_brightness": {
+      "topic_group": "skrin_brightness"
+    },
     "all_light_color": {
       "topic_group": "color"
+    },
+    "start_light_color": {
+      "topic_group": "color",
+      "values": {
+        "1": "#FFB977",
+        "2": "#FFB977",
+        "3": "#FF9E38",
+        "4": "#FF9E38",
+        "5": "#FF9E38",
+        "6": "#FF9E38"
+      }
+    },
+    "all_light_power": {
+      "topic_group": "power"
     }
   }
 }

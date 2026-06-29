@@ -2,6 +2,20 @@
   "location": "tricet_valka",
   "events": [
     {
+      "id": "tricet_valka_zvuk1",
+      "name": "Tricetileta Valka - Zahajovaci Zvuk",
+      "topic": [
+        "spital/RPI-TV/media/command"
+      ],
+      "payload": [
+        ["start;tricet_valka_video1_sound;media/1_1.wav", 0]
+      ],
+      "macro": {
+        "focus_light": "1"
+      },
+      "media_end": true
+    },
+    {
       "id": "tricet_valka_video1",
       "name": "Tricetileta Valka - Pocatecni Video",
       "topic": [
@@ -9,8 +23,8 @@
         "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;tricet_valka_video1_video;TV1.mp4", 0],
-        ["start;tricet_valka_video1_sound;TV1.wav", 0]
+        ["start;tricet_valka_video1_video;media/TV1.mp4", 0],
+        ["start;tricet_valka_video1_sound;media/TV1.wav", 0]
       ],
       "macro": {
         "all_light_brightness": "190",
@@ -26,11 +40,10 @@
         "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;tricet_valka_zvuk2;1_2.wav", 0]
+        ["start;tricet_valka_zvuk2;media/1_2.wav", 0]
       ],
       "macro": {
-        "all_light_brightness": "250",
-        "all_light_color": "#FFD6AA"
+        "focus_light": "1"
       },
       "media_end": true,
       "media_end_id": "tricet_valka_zvuk2"
@@ -40,13 +53,15 @@
       "name": "Tricetileta Valka - Zvuk 3",
       "topic": [
         "spital/RPI-TV/media/command",
-        "spital/uv/rgb/set",
-        "spital/uv/brightness/set"
+        "spital/UV/light/set",
+        "spital/UV/hex/set",
+        "spital/UV/brightness/set"
       ],
       "payload": [
-        ["start;tricet_valka_sound3;1_3.wav", 0],
-        ["#FF0000", 0],
-        ["250", 0]
+        ["start;tricet_valka_sound3;media/1_3.wav", 0],
+        [1, 0],
+        ["#FF0000", 0.5],
+        ["250", 0.5]
       ],
       "macro": {
         "all_light_brightness": "0"
@@ -60,7 +75,7 @@
         "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;tricet_valka_music_loop;1_4.wav", 0]
+        ["start;tricet_valka_music_loop;media/1_4.wav", 0]
       ],
       "media_end": true
     },
@@ -70,7 +85,7 @@
       "topic": "spital/switch/TLACITKO1/button/0",
       "description": "Dite zmacklo tlacitko u jerabu",
       "payload": "pressed",
-      "condition": "0"
+      "condition": "pressed"
     },
     {
       "id": "tricet_valka_tlacitko2",
@@ -78,7 +93,7 @@
       "topic": "spital/switch/TLACITKO2/button/0",
       "description": "Dospely zmackl tlacitko",
       "payload": "pressed",
-      "condition": "0"
+      "condition": "pressed"
     },
     {
       "id": "tricet_valka_sound5",
@@ -86,16 +101,18 @@
       "description": "Zapni Zvuk 1_5, zapni svetla, vypni UV",
       "topic": [
         "spital/RPI-TV/media/command",
+        "spital/RPI-TV/media/command",
         "spital/UV/brightness/set"
       ],
       "payload": [
-        ["start;tricet_valka_sound5;1_5.wav", 0],
-        ["0", 0]
+        ["stop;tricet_valka_music_loop;media/1_4.wav", 0],
+        ["start;tricet_valka_sound5;media/1_5.wav", 0.2],
+        ["0", 0.2]
       ],
       "macro": {
-        "focus_light": "1"
+        "focus_light": ["1", 0.2]
       },
-      "media_end": false
+      "media_end": true
     },
     {
       "id": "tricet_next",

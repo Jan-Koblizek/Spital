@@ -54,9 +54,11 @@ class Adolf(Location):
         elif event_id == AdolfEvents.MUSIC_LOOP_OFF and self.phase == "music_loop":
             send_event(AdolfEvents.MUSIC_LOOP)
         elif event_id == AdolfEvents.TLACITKO1_open and self.buttons_enabled:
+            print("suple otevreno")
             self.suple_otevreno = True
+            self._start_sound4(send_event)
         elif event_id == AdolfEvents.TLACITKO1_close and self.suple_otevreno:
-                    self._start_sound4(send_event)
+            self.buttons_enabled = False
         elif event_id == AdolfEvents.SOUND4_OFF and self.phase == "sound4":
             from locations import ObchodStoleti
 

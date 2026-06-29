@@ -111,6 +111,9 @@ class EscapeRoomRuntime:
         if event_definition is None:
             return False
 
+        if event_id.endswith("_off"):
+            self.send_event(event_definition)
+
         self.handle_event(event_definition.with_payload(event_definition.payload))
         return True
 

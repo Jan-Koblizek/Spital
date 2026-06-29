@@ -4,35 +4,31 @@
     {
       "id": "tour_start",
       "name": "Zacatek Tour",
-      "topic": "spital/switch/TLACITKO_START",
+      "topic": "spital/switch/TLACITKO_START/button/0",
       "description": "Průvodce spouští escape room",
-      "payload": "1",
-      "condition": "1"
+      "payload": "pressed",
+      "condition": "pressed"
+    },
+    {
+      "id": "start_check",
+      "name": "Kontrola Start",
+      "macro": {
+        "all_light_power": "1",
+        "all_light_brightness": "0",
+        "skrin_light_brightness": "0"
+      }
     },
     {
       "id": "start_wav",
       "name": "Zahájovací WAV",
       "topic": "spital/RPI-TV/media/command",
       "description": "Úvodník, proslov duchů",
-      "payload": "start;start_wav;start.wav",
-      "media_end": true
-    },
-    {
-      "id": "start_wav_off",
-      "name": "Zahájovací WAV - přehráno",
-      "topic": "spital/RPI-TV/media/command",
-      "description": "Přehrán Úvodník, proslov duchů",
-      "payload": "stop;start_wav;start.wav",
-      "media_end": true
-    },
-    {
-      "id": "start_lights",
-      "name": "Zahajovaci svetla",
-      "description": "Rozsviceni po konci zahajovaci MP3.",
+      "payload": "start;start_wav;media/A_1.wav",
       "macro": {
-        "all_light_brightness": "100",
-        "all_light_color": "#FFD6AA"
-      }
+        "all_light_brightness": ["250", 12],
+        "start_light_color": [null, 12]
+      },
+      "media_end": true
     },
     {
       "id": "start_next",

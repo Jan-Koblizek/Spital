@@ -8,6 +8,8 @@ class ZalozeniSpitaluEvents(str, Enum):
 
     VIDEO1 = "zalozeni_spitalu_video1"
     VIDEO1_OFF = "zalozeni_spitalu_video1_off"
+    SOUND1 = "zalozeni_spitalu_sound1"
+    SOUND1_OFF = "zalozeni_spitalu_sound1_off"
     MUSIC_LOOP = "zalozeni_spitalu_music_loop"
     MUSIC_LOOP_OFF = "zalozeni_spitalu_music_loop_off"
     TLACITKO1 = "zalozeni_spitalu_tlacitko1"
@@ -33,6 +35,7 @@ class ZalozeniSpitalu(Location):
         self.next_started = False
         self.phase = "video1"
         send_event(ZalozeniSpitaluEvents.VIDEO1)
+        send_event(ZalozeniSpitaluEvents.SOUND1)
 
     def process_event(
         self,
@@ -41,7 +44,7 @@ class ZalozeniSpitalu(Location):
         send_event: SendEvent,
     ) -> Location:
         """React to configured events for this location."""
-        if event_id == ZalozeniSpitaluEvents.VIDEO1_OFF and self.phase == "video1":
+        if event_id == ZalozeniSpitaluEvents.SOUND1_OFF and self.phase == "video1":
             self.phase = "music_loop"
             self.buttons_enabled = True
             send_event(ZalozeniSpitaluEvents.MUSIC_LOOP)

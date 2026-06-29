@@ -150,6 +150,7 @@ def _media_end_event_from_config(raw_event: dict[str, Any], macros: dict[str, An
 
     event_id = _media_end_event_id(raw_event)
     payload = _media_end_payload(raw_event)
+    messages = _media_stop_messages_from_config(raw_event)
 
     return Event(
         id=event_id,
@@ -158,7 +159,7 @@ def _media_end_event_from_config(raw_event: dict[str, Any], macros: dict[str, An
         description=f"Generated media end event for {raw_event['id']}.",
         payload=_encode_payload(payload),
         conditions=(PayloadCondition(value=payload),),
-        messages=(EventMessage(topic=media_end_topic, payload=_encode_payload(payload)),),
+        messages=messages,
         incoming=True,
     )
 
@@ -188,6 +189,30 @@ def _media_id_from_command(payload: str) -> str | None:
         return None
 
     return parts[1]
+
+
+def _media_stop_messages_from_config(raw_event: dict[str, Any]) -> tuple[EventMessage, ...]:
+    """Build stop commands for every media item started by an event."""
+    return tuple(
+        EventMessage(topic=message.topic, payload=_encode_payload(stop_command))
+        for message in _topic_messages_from_config(raw_event)
+        for stop_command in (_media_stop_command(message.payload),)
+        if stop_command is not None
+    )
+
+
+def _media_stop_command(payload: bytes | None) -> str | None:
+    """Return `stop;id;path_to_file` for a configured media start command."""
+    if payload is None:
+        return None
+
+    command = payload.decode("utf-8")
+    parts = command.split(";", 2)
+
+    if len(parts) != 3 or parts[0] != "start" or not parts[1]:
+        return None
+
+    return f"stop;{parts[1]};{parts[2]}"
 
 
 def _media_end_event_id(raw_event: dict[str, Any]) -> str:
@@ -255,16 +280,41 @@ def _messages_for_macro(macro_name: Any, macro_value: Any, macros: dict[str, Any
         raise ValueError(f"Unknown event macro '{macro_name}'.")
 
     topics = _topics_for_macro(macro_name, macro, macros)
+    value, delay = _macro_value_from_config(macro_name, macro_value)
+
+    if _is_palette_macro(macro):
+        return _palette_macro_messages(macro_name, delay, macro, topics)
 
     if _is_all_light_macro(macro):
-        return _all_light_macro_messages(macro_name, macro_value, topics)
+        return _all_light_macro_messages(macro_name, value, delay, topics)
 
-    return _focus_light_macro_messages(macro_name, macro_value, macro, topics)
+    return _focus_light_macro_messages(macro_name, value, delay, macro, topics, macros)
+
+
+def _macro_value_from_config(macro_name: str, raw_value: Any) -> tuple[Any, float]:
+    """Return the macro value and optional delay from config."""
+    if isinstance(raw_value, list) and len(raw_value) == 2 and isinstance(raw_value[1], int | float):
+        return raw_value[0], float(raw_value[1])
+
+    if isinstance(raw_value, dict) and "value" in raw_value:
+        delay = raw_value.get("delay", 0.0)
+
+        if not isinstance(delay, int | float):
+            raise ValueError(f"Event macro '{macro_name}' delay must be a number.")
+
+        return raw_value["value"], float(delay)
+
+    return raw_value, 0.0
 
 
 def _is_all_light_macro(macro: dict[str, Any]) -> bool:
     """Return whether this macro sets every topic to the same value."""
-    return "dimmed" not in macro and "max" not in macro
+    return "dimmed" not in macro and "max" not in macro and "values" not in macro
+
+
+def _is_palette_macro(macro: dict[str, Any]) -> bool:
+    """Return whether this macro sets configured topics to per-light values."""
+    return "values" in macro
 
 
 def _topics_for_macro(macro_name: str, macro: dict[str, Any], macros: dict[str, Any]) -> dict[str, str]:
@@ -287,11 +337,31 @@ def _topics_for_macro(macro_name: str, macro: dict[str, Any], macros: dict[str, 
     return topics
 
 
+def _topics_for_light_group(macro_name: str, group_name: Any, macros: dict[str, Any]) -> dict[str, str]:
+    """Return topics from a named light group in the shared macros config."""
+    light_groups = macros.get("lights")
+
+    if not isinstance(group_name, str):
+        raise ValueError(f"Event macro '{macro_name}' light group name must be a string.")
+
+    if not isinstance(light_groups, dict):
+        raise ValueError(f"Event macro '{macro_name}' references light group '{group_name}', but no lights groups are configured.")
+
+    topics = light_groups.get(group_name)
+
+    if not isinstance(topics, dict) or not all(isinstance(topic, str) for topic in topics.values()):
+        raise ValueError(f"Event macro '{macro_name}' light group '{group_name}' must resolve to an object of id/topic pairs.")
+
+    return topics
+
+
 def _focus_light_macro_messages(
     macro_name: str,
     bright_light: Any,
+    delay: float,
     macro: dict[str, Any],
     lights: dict[str, str],
+    macros: dict[str, Any],
 ) -> tuple[EventMessage, ...]:
     """Build MQTT messages for the focus-light macro."""
     if not isinstance(bright_light, str):
@@ -303,20 +373,72 @@ def _focus_light_macro_messages(
     max_value = macro.get("max")
     dimmed_value = macro.get("dimmed")
 
-    return tuple(
+    brightness_messages = tuple(
         EventMessage(
             topic=topic,
             payload=_encode_payload(max_value if light_id == bright_light else dimmed_value),
+            delay=delay,
         )
         for light_id, topic in lights.items()
     )
 
+    return brightness_messages + _focus_light_color_messages(macro_name, delay, macro, macros)
 
-def _all_light_macro_messages(macro_name: str, value: Any, topics: dict[str, str]) -> tuple[EventMessage, ...]:
+
+def _focus_light_color_messages(
+    macro_name: str,
+    delay: float,
+    macro: dict[str, Any],
+    macros: dict[str, Any],
+) -> tuple[EventMessage, ...]:
+    """Build optional color messages for the focus-light macro."""
+    color_group = macro.get("color_topic_group")
+    colors = macro.get("colors")
+
+    if color_group is None and colors is None:
+        return ()
+
+    if not isinstance(colors, dict):
+        raise ValueError(f"Event macro '{macro_name}' colors must be an object of light id/color pairs.")
+
+    color_topics = _topics_for_light_group(macro_name, color_group, macros)
+
+    missing_lights = set(colors) - set(color_topics)
+
+    if missing_lights:
+        missing = ", ".join(sorted(str(light_id) for light_id in missing_lights))
+        raise ValueError(f"Event macro '{macro_name}' colors reference unknown light ids: {missing}.")
+
+    return tuple(
+        EventMessage(topic=color_topics[light_id], payload=_encode_payload(color), delay=delay)
+        for light_id, color in colors.items()
+    )
+
+
+def _all_light_macro_messages(macro_name: str, value: Any, delay: float, topics: dict[str, str]) -> tuple[EventMessage, ...]:
     """Build MQTT messages that set every configured light topic to one value."""
     return tuple(
-        EventMessage(topic=topic, payload=_encode_payload(value))
+        EventMessage(topic=topic, payload=_encode_payload(value), delay=delay)
         for topic in topics.values()
+    )
+
+
+def _palette_macro_messages(macro_name: str, delay: float, macro: dict[str, Any], topics: dict[str, str]) -> tuple[EventMessage, ...]:
+    """Build MQTT messages that set configured topics to per-light values."""
+    values = macro.get("values")
+
+    if not isinstance(values, dict):
+        raise ValueError(f"Event macro '{macro_name}' values must be an object of id/value pairs.")
+
+    missing_topics = set(values) - set(topics)
+
+    if missing_topics:
+        missing = ", ".join(sorted(str(topic_id) for topic_id in missing_topics))
+        raise ValueError(f"Event macro '{macro_name}' values reference unknown ids: {missing}.")
+
+    return tuple(
+        EventMessage(topic=topics[topic_id], payload=_encode_payload(value), delay=delay)
+        for topic_id, value in values.items()
     )
 
 
