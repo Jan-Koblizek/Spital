@@ -5,10 +5,10 @@
       "id": "adolf_sound1",
       "name": "Adolf - Pocatecni Zvuk",
       "topic": [
-        "pi/media/command"
+        "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;adolf_sound1;adolf_start.wav", 0]
+        ["start;adolf_sound1;2_1.wav", 0]
       ],
       "macro": {
         "focus_light": "2"
@@ -19,12 +19,10 @@
       "id": "adolf_video1",
       "name": "Adolf - Pocatecni Video",
       "topic": [
-        "pi/media/command",
-        "pi/media/command"
+        "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;adolf_video1_sound;adolf2.wav", 0],
-        ["start;adolf_video1_video;adolf2.mp4", 0]
+        ["start;adolf_video1_video;TV2.mp4", 0]
       ],
       "media_end": true,
       "media_end_id": "adolf_video1_video"
@@ -33,14 +31,14 @@
       "id": "adolf_sound3",
       "name": "Adolf - Povidani 3",
       "topic": [
-        "pi/media/command",
-        "spital/rgb/brightness/2",
-        "spital/rgb/brightness/7"
+        "spital/RPI-TV/media/command",
+        "spital/SV2/brightness/set",
+        "spital/SKRIN2/brightness/set"
       ],
       "payload": [
-        ["start;adolf_sound3;adolf3.wav", 0],
-        ["70", 0],
-        ["100", 0]
+        ["start;adolf_sound3;2_2.wav", 0],
+        ["190", 0],
+        ["254", 0]
       ],
       "media_end": true
     },
@@ -48,31 +46,39 @@
       "id": "adolf_music_loop",
       "name": "Adolf - Loop Hudba",
       "topic": [
-        "pi/media/command"
+        "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;adolf_music_loop;adolf_music_loop.wav", 0]
+        ["start;adolf_music_loop;2_3.wav", 0]
       ],
       "media_end": true
     },
     {
-      "id": "adolf_tlacitko1",
-      "name": "Prvni Tlacitko",
-      "topic": "spital/adolf/tlacitko1",
-      "description": "Tlačítko zmáčknuto",
-      "payload": "1",
+      "id": "adolf_tlacitko1-1",
+      "name": "Tlacitko3 - otevreno",
+      "topic": "spital/switch/TLACITKO3/button/0",
+      "description": "Suplik Skrin2 otevren",
+      "payload": "releassed",
+      "condition": "0"
+    },
+        {
+      "id": "adolf_tlacitko1-0",
+      "name": "Tlacitko3 - zavreno",
+      "topic": "spital/switch/TLACITKO3/button/0",
+      "description": "Suplik Skrin2 zavren",
+      "payload": "pressed",
       "condition": "1"
     },
     {
       "id": "adolf_sound4",
       "name": "Adolf - Povidani 4",
       "topic": [
-        "pi/media/command",
-        "pi/media/command"
+        "spital/RPI-TV/media/command",
+        "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;adolf_sound4;adolf4.wav", 0],
-        ["stop;adolf_music_loop;adolf_music_loop.wav", 0]
+        ["stop;adolf_music_loop;2_3.wav", 0],
+        ["start;adolf_sound4;2_4.wav", 1]
       ],
       "media_end": true
     },
@@ -80,11 +86,11 @@
       "id": "adolf_next",
       "name": "Adolf - Další",
       "topic": [
-        "spital/rgb/brightness/2",
-        "spital/rgb/brightness/8"
+        "spital/SV2/brightness/set",
+        "spital/SKRIN2/brightness/set"
       ],
       "payload": [
-        ["100", 0],
+        ["250", 0],
         ["0", 0]
       ]
     }

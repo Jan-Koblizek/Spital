@@ -8,7 +8,7 @@ from interfaces import Location, SendEvent
 class StartEvents(str, Enum):
     INIT = "init"
     KONTROLA = "kontrola"
-    START_MP3 = "start_mp3"
+    START_MP3 = "start_wav"
     START_MP3_OFF = "start_mp3_off"
     START_LIGHTS = "start_lights"
     NEXT = "start_next"
