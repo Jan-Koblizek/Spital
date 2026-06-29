@@ -14,7 +14,8 @@ class AdolfEvents(str, Enum):
     SOUND3_OFF = "adolf_sound3_off"
     MUSIC_LOOP = "adolf_music_loop"
     MUSIC_LOOP_OFF = "adolf_music_loop_off"
-    TLACITKO1 = "adolf_tlacitko1"
+    TLACITKO1_open = "adolf_tlacitko1-1"
+    TLACITKO1_close = "adolf_tlacitko1-0"
     SOUND4 = "adolf_sound4"
     SOUND4_OFF = "adolf_sound4_off"
     NEXT = "adolf_next"
@@ -52,8 +53,10 @@ class Adolf(Location):
             send_event(AdolfEvents.MUSIC_LOOP)
         elif event_id == AdolfEvents.MUSIC_LOOP_OFF and self.phase == "music_loop":
             send_event(AdolfEvents.MUSIC_LOOP)
-        elif event_id == AdolfEvents.TLACITKO1 and self.buttons_enabled:
-            self._start_sound4(send_event)
+        elif event_id == AdolfEvents.TLACITKO1_open and self.buttons_enabled:
+            self.suple_otevreno = True
+        elif event_id == AdolfEvents.TLACITKO1_close and self.suple_otevreno:
+                    self._start_sound4(send_event)
         elif event_id == AdolfEvents.SOUND4_OFF and self.phase == "sound4":
             from locations import ObchodStoleti
 

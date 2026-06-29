@@ -4,17 +4,25 @@
     {
       "id": "tour_start",
       "name": "Zacatek Tour",
-      "topic": "spital/start/spinac_zahajeni",
+      "topic": "spital/switch/TLACITKO_START",
       "description": "Průvodce spouští escape room",
       "payload": "1",
       "condition": "1"
     },
     {
-      "id": "start_mp3",
-      "name": "Zahájovací MP3",
-      "topic": "pi/media/command",
-      "description": "Spuštění počáteční sekvence mp3.",
-      "payload": "start;start_mp3;mp3_1.mp3",
+      "id": "start_wav",
+      "name": "Zahájovací WAV",
+      "topic": "spital/RPI-TV/media/command",
+      "description": "Úvodník, proslov duchů",
+      "payload": "start;start_wav;start.wav",
+      "media_end": true
+    },
+    {
+      "id": "start_wav_off",
+      "name": "Zahájovací WAV - přehráno",
+      "topic": "spital/RPI-TV/media/command",
+      "description": "Přehrán Úvodník, proslov duchů",
+      "payload": "stop;start_wav;start.wav",
       "media_end": true
     },
     {

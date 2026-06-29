@@ -1,24 +1,24 @@
 {
   "lights": {
     "brightness": {
-      "1": "spital/rgbl1/brightness/set",
-      "2": "spital/rgbl2/brightness/set",
-      "3": "spital/rgbl3/brightness/set",
-      "4": "spital/rgbl4/brightness/set",
-      "5": "spital/rgbl5/brightness/set",
-      "6": "spital/rgbl6/brightness/set"
+      "1": "spital/SV1/brightness/set",
+      "2": "spital/SV2/brightness/set",
+      "3": "spital/SV3/brightness/set",
+      "4": "spital/SV4/brightness/set",
+      "5": "spital/SV5/brightness/set",
+      "6": "spital/SV6/brightness/set"
     },
     "color": {
-      "1": "spital/rgbl1/hex/set",
-      "2": "spital/rgbl2/hex/set",
-      "3": "spital/rgbl3/hex/set",
-      "4": "spital/rgbl4/hex/set",
-      "5": "spital/rgbl5/hex/set",
-      "6": "spital/rgbl6/hex/set"
+      "1": "spital/SV1/hex/set",
+      "2": "spital/SV2/hex/set",
+      "3": "spital/SV3/hex/set",
+      "4": "spital/SV4/hex/set",
+      "5": "spital/SV5/hex/set",
+      "6": "spital/SV6/hex/set"
     }
   },
-  "media_end_topic": "pi/media/status",
-  "media_status_topic": "pi/media/status",
+  "media_end_topic": "spital/RPI-TV/media/status",
+  "media_status_topic": "spital/RPI-TV/media/status",
   "macros": {
     "focus_light": {
       "topic_group": "brightness",
