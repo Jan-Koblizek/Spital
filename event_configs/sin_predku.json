@@ -28,7 +28,7 @@
         "spital/RELE/relay/0/set"
       ],
       "payload": [
-        ["0", 360]
+        ["0", 600]
       ],
       "condition": "0"
     },

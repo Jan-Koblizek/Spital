@@ -42,7 +42,7 @@
         "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["stop;jerab_music_loop;media/5_2.wav", 0],
+        ["stop", 0],
         ["start;jerab_sound4;media/5_3.wav", 0]
       ],
       "media_end": true

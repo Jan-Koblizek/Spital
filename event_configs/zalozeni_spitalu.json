@@ -8,7 +8,7 @@
         "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;zalozeni_spitalu_video1_video;media/TV4.mp4", 10]
+        ["start;zalozeni_spitalu_video1_video;media/TV4.mp4", 0]
       ],
       "macro": {
         "focus_light": "4"
@@ -22,7 +22,7 @@
         "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;zalozeni_spitalu_video1_sound;media/4_1.wav", 10]
+        ["start;zalozeni_spitalu_video1_sound;media/4_1.wav", 0]
       ],
       "media_end": true
     },
@@ -55,11 +55,14 @@
         "spital/SKRIN4/brightness/set"
       ],
       "payload": [
-        ["stop;zalozeni_spitalu_music_loop;media/4_2.wav", 0],
+        ["stop;zalozeni_spitalu_music_loop", 0],
         ["start;zalozeni_spitalu_sound2;media/4_3.wav", 0],
         ["190", 0],
         ["250", 0]
       ],
+      "macro": {
+        "focus_light": 0
+      },
       "media_end": true
     },
     {
@@ -86,13 +89,11 @@
       "name": "Založení špitálu - Next",
       "topic": [
         "spital/SKRIN4/brightness/set",
-        "spital/RPI-TV/media/command",
         "spital/RPI-TV/media/command"
       ],
       "payload": [
         ["0", 0],
-        ["stop;zalozeni_spitalu_music_loop2;media/4_4.wav", 0],
-        ["stop;zalozeni_spitalu_video1_video;media/TV4.mp4", 0]
+        ["stop", 0]
       ]
     }
   ]

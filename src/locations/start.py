@@ -37,13 +37,10 @@ class Start(Location):
         if event_id == StartEvents.START and self.zkontrolovano:
             self._start_intro_sequence(send_event)
 
-        print(self.start_sequence_started and not self.start_lights_started)
-        print(event_id)
         if event_id == StartEvents.START_MP3_OFF and self.start_sequence_started and not self.start_lights_started:
-            print("Start MP3 finished, starting lights")
             self.start_lights_started = True
             send_event(StartEvents.START_LIGHTS)
-            Timer(5, lambda: send_event(StartEvents.NEXT)).start()
+            Timer(0.5, lambda: send_event(StartEvents.NEXT)).start()
 
         if event_id == StartEvents.NEXT:
             from locations import TricetValka

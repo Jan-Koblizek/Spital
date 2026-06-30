@@ -309,7 +309,7 @@ def _macro_value_from_config(macro_name: str, raw_value: Any) -> tuple[Any, floa
 
 def _is_all_light_macro(macro: dict[str, Any]) -> bool:
     """Return whether this macro sets every topic to the same value."""
-    return "dimmed" not in macro and "max" not in macro and "values" not in macro
+    return "dimmed" not in macro and "max" not in macro and "values" not in macro and "presets" not in macro
 
 
 def _is_palette_macro(macro: dict[str, Any]) -> bool:
@@ -364,11 +364,13 @@ def _focus_light_macro_messages(
     macros: dict[str, Any],
 ) -> tuple[EventMessage, ...]:
     """Build MQTT messages for the focus-light macro."""
-    if not isinstance(bright_light, str):
-        raise ValueError(f"Event macro '{macro_name}' value must be a string light id.")
+    bright_light = _focus_light_id_from_config(macro_name, bright_light)
 
-    if bright_light not in lights:
+    if bright_light is not None and bright_light not in lights:
         raise ValueError(f"Bright light '{bright_light}' is not configured in macro '{macro_name}'.")
+
+    if "presets" in macro:
+        return _focus_light_preset_messages(macro_name, bright_light, delay, macro, lights, macros)
 
     max_value = macro.get("max")
     dimmed_value = macro.get("dimmed")
@@ -376,13 +378,102 @@ def _focus_light_macro_messages(
     brightness_messages = tuple(
         EventMessage(
             topic=topic,
-            payload=_encode_payload(max_value if light_id == bright_light else dimmed_value),
+            payload=_encode_payload(max_value if bright_light is not None and light_id == bright_light else dimmed_value),
             delay=delay,
         )
         for light_id, topic in lights.items()
     )
 
     return brightness_messages + _focus_light_color_messages(macro_name, delay, macro, macros)
+
+
+def _focus_light_id_from_config(macro_name: str, raw_light_id: Any) -> str | None:
+    """Return a focused light id, or None when all lights should be dimmed."""
+    if raw_light_id == 0 or raw_light_id == "0":
+        return None
+
+    if not isinstance(raw_light_id, str):
+        raise ValueError(f"Event macro '{macro_name}' value must be a string light id or 0.")
+
+    return raw_light_id
+
+
+def _focus_light_preset_messages(
+    macro_name: str,
+    bright_light: str | None,
+    delay: float,
+    macro: dict[str, Any],
+    lights: dict[str, str],
+    macros: dict[str, Any],
+) -> tuple[EventMessage, ...]:
+    """Build brightness and color messages from per-light focus presets."""
+    presets = macro.get("presets")
+
+    if not isinstance(presets, dict):
+        raise ValueError(f"Event macro '{macro_name}' presets must be an object of light id/preset pairs.")
+
+    unknown_lights = set(presets) - set(lights)
+    missing_lights = set(lights) - set(presets)
+
+    if unknown_lights:
+        unknown = ", ".join(sorted(str(light_id) for light_id in unknown_lights))
+        raise ValueError(f"Event macro '{macro_name}' presets reference unknown light ids: {unknown}.")
+
+    if missing_lights:
+        missing = ", ".join(sorted(str(light_id) for light_id in missing_lights))
+        raise ValueError(f"Event macro '{macro_name}' presets are missing light ids: {missing}.")
+
+    color_topics = _topics_for_light_group(macro_name, macro.get("color_topic_group"), macros)
+    messages: list[EventMessage] = []
+
+    for light_id, brightness_topic in lights.items():
+        state_name = "focused" if bright_light is not None and light_id == bright_light else "dimmed"
+        state = _focus_light_preset_state(macro_name, light_id, presets[light_id], state_name)
+
+        messages.append(
+            EventMessage(
+                topic=brightness_topic,
+                payload=_encode_payload(state["brightness"]),
+                delay=delay,
+            )
+        )
+
+        if light_id not in color_topics:
+            raise ValueError(f"Event macro '{macro_name}' color topic group is missing light id '{light_id}'.")
+
+        messages.append(
+            EventMessage(
+                topic=color_topics[light_id],
+                payload=_encode_payload(state["color"]),
+                delay=delay,
+            )
+        )
+
+    return tuple(messages)
+
+
+def _focus_light_preset_state(
+    macro_name: str,
+    light_id: str,
+    preset: Any,
+    state_name: str,
+) -> dict[str, Any]:
+    """Return one dimmed/focused state from a light preset."""
+    if not isinstance(preset, dict):
+        raise ValueError(f"Event macro '{macro_name}' preset for light '{light_id}' must be an object.")
+
+    state = preset.get(state_name)
+
+    if not isinstance(state, dict):
+        raise ValueError(f"Event macro '{macro_name}' preset for light '{light_id}' must include '{state_name}'.")
+
+    missing_fields = {"brightness", "color"} - set(state)
+
+    if missing_fields:
+        missing = ", ".join(sorted(missing_fields))
+        raise ValueError(f"Event macro '{macro_name}' preset for light '{light_id}' state '{state_name}' is missing: {missing}.")
+
+    return state
 
 
 def _focus_light_color_messages(

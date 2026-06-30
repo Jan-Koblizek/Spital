@@ -39,16 +39,68 @@
   "macros": {
     "focus_light": {
       "topic_group": "brightness",
-      "dimmed": "100",
-      "max": "250",
       "color_topic_group": "color",
-      "colors": {
-        "1": "#FFB977",
-        "2": "#FFB977",
-        "3": "#FF9E38",
-        "4": "#FF9E38",
-        "5": "#FF9E38",
-        "6": "#FF9E38"
+      "presets": {
+        "1": {
+          "dimmed": {
+            "brightness": "60",
+            "color": "#FFB080"
+          },
+          "focused": {
+            "brightness": "255",
+            "color": "#FFA957"
+          }
+        },
+        "2": {
+          "dimmed": {
+            "brightness": "60",
+            "color": "#FFB080"
+          },
+          "focused": {
+            "brightness": "255",
+            "color": "#FFA957"
+          }
+        },
+        "3": {
+          "dimmed": {
+            "brightness": "50",
+            "color": "#FFC477"
+          },
+          "focused": {
+            "brightness": "255",
+            "color": "#FF9E38"
+          }
+        },
+        "4": {
+          "dimmed": {
+            "brightness": "50",
+            "color": "#FFC477"
+          },
+          "focused": {
+            "brightness": "255",
+            "color": "#FF9E38"
+          }
+        },
+        "5": {
+          "dimmed": {
+            "brightness": "50",
+            "color": "#FFC477"
+          },
+          "focused": {
+            "brightness": "255",
+            "color": "#FF9E38"
+          }
+        },
+        "6": {
+          "dimmed": {
+            "brightness": "50",
+            "color": "#FFC477"
+          },
+          "focused": {
+            "brightness": "255",
+            "color": "#FF9E38"
+          }
+        }
       }
     },
     "all_light_brightness": {
@@ -59,17 +111,6 @@
     },
     "all_light_color": {
       "topic_group": "color"
-    },
-    "start_light_color": {
-      "topic_group": "color",
-      "values": {
-        "1": "#FFB977",
-        "2": "#FFB977",
-        "3": "#FF9E38",
-        "4": "#FF9E38",
-        "5": "#FF9E38",
-        "6": "#FF9E38"
-      }
     },
     "all_light_power": {
       "topic_group": "power"

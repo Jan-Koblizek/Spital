@@ -41,7 +41,7 @@ Polozky:
 - `macro`: volitelne; vygeneruje cast odchozich MQTT zprav podle sdilene konfigurace v `event_configs/macros.json`.
 - `media_end`: volitelne; `true` automaticky vytvori prichozi udalost `<id>_off` na sdilenem topicu pro konce medii.
 
-Makro pro zamerene svetlo nastavi vsechna nakonfigurovana svetla na tlumenou hodnotu a jedno vybrane svetlo na maximum:
+Makro pro zamerene svetlo nastavi vsechna nakonfigurovana svetla na jejich `dimmed` preset a jedno vybrane svetlo na jeho `focused` preset:
 
 ```json
 {
@@ -51,6 +51,37 @@ Makro pro zamerene svetlo nastavi vsechna nakonfigurovana svetla na tlumenou hod
     "focus_light": "3"
   },
   "incoming": false
+}
+```
+
+Presety se nastavuji jednou v `event_configs/macros.json`. Kazde svetlo ma vlastni jas i barvu pro oba stavy:
+
+```json
+"focus_light": {
+  "topic_group": "brightness",
+  "color_topic_group": "color",
+  "presets": {
+    "1": {
+      "dimmed": {
+        "brightness": "100",
+        "color": "#FFB977"
+      },
+      "focused": {
+        "brightness": "250",
+        "color": "#FFB977"
+      }
+    }
+  }
+}
+```
+
+Kdyz udalost zavola `"focus_light": "1"`, svetlo `1` dostane preset `focused` a ostatni svetla dostanou svoje `dimmed` presety.
+
+Pro ztlumeni vsech svetel bez zamereneho svetla pouzijte `0`:
+
+```json
+"macro": {
+  "focus_light": 0
 }
 ```
 

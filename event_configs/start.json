@@ -25,8 +25,7 @@
       "description": "Úvodník, proslov duchů",
       "payload": "start;start_wav;media/A_1.wav",
       "macro": {
-        "all_light_brightness": ["250", 12],
-        "start_light_color": [null, 12]
+        "focus_light": ["1", 12]
       },
       "media_end": true
     },

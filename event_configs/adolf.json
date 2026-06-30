@@ -63,7 +63,7 @@
       "payload": "released",
       "condition": "released"
     },
-        {
+    {
       "id": "adolf_tlacitko1-0",
       "name": "Tlacitko3 - zavreno",
       "topic": "spital/switch/TLACITKO3/button/0",
@@ -79,8 +79,8 @@
         "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["stop;adolf_music_loop;media/2_3.wav", 0],
-        ["start;adolf_sound4;media/2_4.wav", 1]
+        ["stop", 0],
+        ["start;adolf_sound4;media/2_4.wav", 0.5]
       ],
       "media_end": true
     },

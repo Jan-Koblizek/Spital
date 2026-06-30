@@ -10,9 +10,6 @@
       "payload": [
         ["start;tricet_valka_video1_sound;media/1_1.wav", 0]
       ],
-      "macro": {
-        "focus_light": "1"
-      },
       "media_end": true
     },
     {
@@ -105,7 +102,7 @@
         "spital/UV/brightness/set"
       ],
       "payload": [
-        ["stop;tricet_valka_music_loop;media/1_4.wav", 0],
+        ["stop", 0],
         ["start;tricet_valka_sound5;media/1_5.wav", 0.2],
         ["0", 0.2]
       ],
