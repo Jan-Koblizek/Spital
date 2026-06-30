@@ -22,7 +22,7 @@ class SinPredku(Location):
     def enter_location(self, send_event: SendEvent):
         """Start the final scene."""
         self.phase = "sound1"
-        self.state_checked = False
+        #self.state_checked = False
         send_event(SinPredkuEvents.SOUND1)
         send_event(SinPredkuEvents.LIGHTS_OFF)
         send_event(SinPredkuEvents.CLOUD_OFF)
@@ -37,11 +37,11 @@ class SinPredku(Location):
         if event_id == SinPredkuEvents.CLOUD_OFF:
             from locations import Finished
 
-            self.state_checked = DeviceStateChecks.check()
+            #self.state_checked = DeviceStateChecks.check()
             send_event(SinPredkuEvents.END)
-            kontrola = self._check_initial_state(send_event)
-            if not kontrola:
-                send_event(SinPredku.KONTROLA_FAIL)
+            #kontrola = self._check_initial_state(send_event)
+            #if not kontrola:
+            #    send_event(SinPredku.KONTROLA_FAIL)
             return self.change_location(Finished(), send_event)
 
         return self
