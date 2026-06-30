@@ -47,10 +47,13 @@
       "payload": [
         ["stop", 0],
         ["start;zivot_poddanych_sound2;media/6_3.wav", 0],
-        ["250", 0],
-        ["#FFFFFF", 0],
-        ["1", 0]
+        ["255", 66],
+        ["#FFFFFF", 66],
+        ["1", 66]
       ],
+      "macro": {
+        "focus_light": ["0", 65]
+      },
       "media_end": true
     },
     {
