@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 from queue import Queue
-from threading import Lock, Thread, current_thread
+from threading import Lock, Thread, Timer, current_thread
 from typing import Callable, TypeAlias
 
 from event_config import EVENTS_BY_ID, EVENT_IDS_BY_LOCATION, EVENTS_BY_TOPIC
-from interfaces import Event, Location, SendEvent
+from interfaces import Event, EventMessage, Location, SendEvent
 
 
 RuntimeMessageType: TypeAlias = tuple[str, str | None] | Event | None
@@ -19,6 +19,12 @@ RuntimeFinishedHandler: TypeAlias = Callable[[str], None]
 OutboundEventSender: TypeAlias = Callable[[Event], None]
 """Sends a resolved event to the outside world."""
 
+
+MEDIA_COMMAND_TOPICS = (
+    "spital/RPI-TV/media/command",
+    "spital/RPI-SOUND/media/command",
+)
+"""Media command topics that should be force-stopped when a runtime is killed."""
 
 
 class EscapeRoomRuntime:
@@ -34,7 +40,9 @@ class EscapeRoomRuntime:
     ):
         """Initialize one runtime instance with its starting location."""
         self._lock = Lock()
+        self._timer_lock = Lock()
         self._messages: Queue[RuntimeMessageType] = Queue()
+        self._timers: list[Timer] = []
         self._thread: Thread | None = None
         self._running = False
         self.id = runtime_id
@@ -84,6 +92,8 @@ class EscapeRoomRuntime:
             return
 
         self._running = False
+        self._cancel_timers()
+        self._force_stop_media()
         self._messages.put(None)
         if self._thread is not None and self._thread is not current_thread():
             self._thread.join(timeout=5)
@@ -112,7 +122,7 @@ class EscapeRoomRuntime:
             return False
 
         if event_id.endswith("_off"):
-            self.send_event(event_definition)
+            self._send_event(event_definition)
 
         self.handle_event(event_definition.with_payload(event_definition.payload))
         return True
@@ -219,6 +229,7 @@ class EscapeRoomRuntime:
 
         if finished:
             self._running = False
+            self._cancel_timers()
             print(f"Runtime finished: {self.id}")
 
             if self.finished_handler is not None:
@@ -243,7 +254,71 @@ class EscapeRoomRuntime:
                 print(f"Unknown event id: {event}")
                 return
 
-            self.send_event(event_definition)
+            self._send_outbound_event(event_definition)
             return
 
-        self.send_event(event)
+        self._send_outbound_event(event)
+
+    def _send_outbound_event(self, event: Event) -> None:
+        """Send an event's outbound messages with timers owned by this runtime."""
+        for message in event.outbound_messages():
+            if message.delay <= 0:
+                self._send_outbound_message(message)
+                continue
+
+            timer = Timer(message.delay, lambda message=message: self._send_scheduled_message(message))
+
+            with self._timer_lock:
+                if not self._running:
+                    return
+
+                self._timers.append(timer)
+
+            timer.start()
+
+    def _send_scheduled_message(self, message: EventMessage) -> None:
+        """Send a delayed message only if this runtime is still active."""
+        with self._timer_lock:
+            if not self._running:
+                return
+
+        self._send_outbound_message(message)
+
+    def _send_outbound_message(self, message: EventMessage) -> None:
+        """Publish one outbound message without leaving delay handling to MQTT."""
+        immediate = Event(
+            id="",
+            name="",
+            topic=message.topic,
+            description="",
+            messages=(
+                EventMessage(
+                    topic=message.topic,
+                    payload=message.payload,
+                ),
+            ),
+        )
+        self.send_event(immediate)
+
+    def _cancel_timers(self) -> None:
+        """Cancel delayed outbound messages owned by this runtime."""
+        with self._timer_lock:
+            timers = list(self._timers)
+            self._timers.clear()
+
+        for timer in timers:
+            timer.cancel()
+
+    def _force_stop_media(self) -> None:
+        """Stop media players when a runtime is killed or the application stops."""
+        stop_event = Event(
+            id="force_stop_media",
+            name="Force Stop Media",
+            topic="",
+            description="Stop all media players for a stopped runtime.",
+            messages=tuple(
+                EventMessage(topic=topic, payload=b"stop")
+                for topic in MEDIA_COMMAND_TOPICS
+            ),
+        )
+        self.send_event(stop_event)

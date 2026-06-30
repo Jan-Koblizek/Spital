@@ -37,8 +37,11 @@ class SinPredku(Location):
         if event_id == SinPredkuEvents.CLOUD_OFF:
             from locations import Finished
 
-            self.state_checked = DeviceStateChecks.check(lambda: send_event(SinPredkuEvents.KONTROLA))
+            self.state_checked = DeviceStateChecks.check()
             send_event(SinPredkuEvents.END)
+            kontrola = self._check_initial_state(send_event)
+            if not kontrola:
+                send_event(SinPredku.KONTROLA_FAIL)
             return self.change_location(Finished(), send_event)
 
         return self

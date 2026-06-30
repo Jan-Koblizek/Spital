@@ -15,7 +15,8 @@
       "macro": {
         "all_light_power": "1",
         "all_light_brightness": "0",
-        "skrin_light_brightness": "0"
+        "skrin_light_brightness": "0",
+        "uv_light_brightness": "0"
       }
     },
     {
@@ -25,7 +26,7 @@
       "description": "Úvodník, proslov duchů",
       "payload": "start;start_wav;media/A_1.wav",
       "macro": {
-        "focus_light": ["1", 12]
+        "focus_light": ["1", 120]
       },
       "media_end": true
     },
@@ -34,7 +35,9 @@
       "name": "Přesun 30 let válka",
       "topic": "spital/start/next",
       "description": "Přesun do sekce třicetiletá válka",
-      "payload": "1",
+      "payload": [
+        ["1", 0.5]
+      ],
       "condition": "1"
     }
   ]

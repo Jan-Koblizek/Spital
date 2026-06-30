@@ -31,6 +31,7 @@ class Adolf(Location):
         """Start the Adolf sequence with sound1."""
         self.buttons_enabled = False
         self.sound4_started = False
+        self.suple_otevreno = False
         self.phase = "sound1"
         send_event(AdolfEvents.SOUND1)
 
@@ -47,9 +48,9 @@ class Adolf(Location):
         elif event_id == AdolfEvents.VIDEO1_OFF and self.phase == "video1":
             self.phase = "sound3"
             send_event(AdolfEvents.SOUND3)
+            self.buttons_enabled = True
         elif event_id == AdolfEvents.SOUND3_OFF and self.phase == "sound3":
             self.phase = "music_loop"
-            self.buttons_enabled = True
             send_event(AdolfEvents.MUSIC_LOOP)
         elif event_id == AdolfEvents.MUSIC_LOOP_OFF and self.phase == "music_loop":
             send_event(AdolfEvents.MUSIC_LOOP)

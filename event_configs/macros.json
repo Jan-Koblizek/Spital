@@ -13,6 +13,9 @@
       "skrin4": "spital/SKRIN4/brightness/set",
       "dvere": "spital/DVERE/brightness/set"
     },
+    "uv_brightness": {
+      "uv": "spital/UV/brightness/set"
+    },
     "color": {
       "1": "spital/SV1/hex/set",
       "2": "spital/SV2/hex/set",
@@ -108,6 +111,9 @@
     },
     "skrin_light_brightness": {
       "topic_group": "skrin_brightness"
+    },
+    "uv_light_brightness": {
+      "topic_group": "uv_brightness"
     },
     "all_light_color": {
       "topic_group": "color"

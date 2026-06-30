@@ -17,7 +17,8 @@
       "name": "Vypni světla v předchozí místnosti.",
       "description": "Příprava na novou tour - uveď do původního stavu.",
       "macro": {
-        "all_light_power": ["0", 120]
+        "all_light_power": ["0", 120],
+        "uv_light_brightness": ["0", 120]
       }
     },
     {
@@ -31,6 +32,13 @@
         ["0", 600]
       ],
       "condition": "0"
+    },
+    {
+      "id": "kontrola_fail",
+      "name": "Kontrola selhala.",
+      "description": "Nepovedla se kontrola na konci prohlídky (abychom byli v počátečním stavu)",
+      "topic": "spital/kontrola/fail",
+      "payload": "1"
     },
     {
       "id": "sin_predku_end",

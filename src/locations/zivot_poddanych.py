@@ -60,12 +60,7 @@ class ZivotPoddanych(Location):
             send_event(ZivotPoddanychEvents.SOUND2)
 
         if event_id == ZivotPoddanychEvents.SOUND2_OFF and self.phase == "sound2":
-            self.phase = "sound3"
-            send_event(ZivotPoddanychEvents.SOUND3)
-
-        if event_id == ZivotPoddanychEvents.SOUND3_OFF and self.phase == "sound3":
             from locations import SinPredku
-
             send_event(ZivotPoddanychEvents.NEXT)
             return self.change_location(SinPredku(), send_event)
 

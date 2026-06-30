@@ -83,8 +83,8 @@ def main() -> None:
         print("\nStopping application.")
     finally:
         frontend.stop()
-        communicator.stop()
         runtime_manager.stop_all()
+        communicator.stop()
 
 
 def handle_message(

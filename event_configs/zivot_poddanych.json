@@ -54,17 +54,6 @@
       "media_end": true
     },
     {
-      "id": "zivot_poddanych_sound3",
-      "name": "Zivot Poddanych - Povidani 3",
-      "topic": [
-        "spital/RPI-TV/media/command"
-      ],
-      "payload": [
-        ["start;zivot_poddanych_sound3;media/6_4.wav", 0]
-      ],
-      "media_end": true
-    },
-    {
       "id": "zivot_poddanych_next",
       "name": "Zivot Poddanych - Dalsi"
     }

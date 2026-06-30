@@ -1,4 +1,5 @@
 from enum import Enum
+from threading import Timer
 
 from interfaces import Location, SendEvent
 
@@ -77,6 +78,9 @@ class ZalozeniSpitalu(Location):
 
         self.sound2_started = True
         self.buttons_enabled = False
-        self.tlacitko2_enabled = True
+        Timer(2, self._enable_tlacitko2).start()
         self.phase = "sound2"
         send_event(ZalozeniSpitaluEvents.SOUND2)
+
+    def _enable_tlacitko2(self) -> None:
+        self.tlacitko2_enabled = True

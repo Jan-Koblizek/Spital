@@ -1,5 +1,4 @@
 from enum import Enum
-from threading import Timer
 
 from device_state import DeviceStateChecks
 from interfaces import Location, SendEvent
@@ -21,7 +20,6 @@ class Start(Location):
 
     def enter_location(self, send_event: SendEvent):
         """Initialize the location and run the initial device-state check."""
-        self.zkontrolovano = self._check_initial_state(send_event)
         send_event(StartEvents.KONTROLA)
         self.start_sequence_started = False
         self.start_lights_started = False
@@ -34,13 +32,13 @@ class Start(Location):
     ) -> Location:
         """React to configured events for this location."""
 
-        if event_id == StartEvents.START and self.zkontrolovano:
+        if event_id == StartEvents.START:
             self._start_intro_sequence(send_event)
 
         if event_id == StartEvents.START_MP3_OFF and self.start_sequence_started and not self.start_lights_started:
             self.start_lights_started = True
             send_event(StartEvents.START_LIGHTS)
-            Timer(0.5, lambda: send_event(StartEvents.NEXT)).start()
+            send_event(StartEvents.NEXT)
 
         if event_id == StartEvents.NEXT:
             from locations import TricetValka
