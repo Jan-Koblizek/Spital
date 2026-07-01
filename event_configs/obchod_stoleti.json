@@ -9,8 +9,8 @@
         "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;obchod_stoleti_video1_video;media/TV3.mp4", 0],
-        ["start;obchod_stoleti_video1_sound;media/TV3.wav", 0]
+        ["start;obchod_stoleti_video1_video;media/TV3.mp4", 0.5],
+        ["start;obchod_stoleti_video1_sound;media/TV3.wav", 0.5]
       ],
       "macro": {
         "focus_light": "3"

@@ -8,7 +8,7 @@
         "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;zalozeni_spitalu_video1_video;media/TV4.mp4", 0]
+        ["start;zalozeni_spitalu_video1_video;media/TV4.mp4", 0.5]
       ],
       "macro": {
         "focus_light": "4"

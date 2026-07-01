@@ -20,8 +20,8 @@
         "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;tricet_valka_video1_video;media/TV1.mp4", 0],
-        ["start;tricet_valka_video1_sound;media/TV1.wav", 0]
+        ["start;tricet_valka_video1_video;media/TV1.mp4", 0.5],
+        ["start;tricet_valka_video1_sound;media/TV1.wav", 0.5]
       ],
       "macro": {
         "all_light_brightness": "190",

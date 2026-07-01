@@ -23,8 +23,8 @@
         "spital/RPI-TV/media/command"
       ],
       "payload": [
-        ["start;adolf_video1_video;media/TV2.mp4", 0],
-        ["start;adolf_video1_sound;media/TV2.wav", 0]
+        ["start;adolf_video1_video;media/TV2.mp4", 0.5],
+        ["start;adolf_video1_sound;media/TV2.wav", 0.5]
       ],
       "media_end": true,
       "media_end_id": "adolf_video1_sound"
