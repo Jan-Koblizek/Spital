@@ -51,14 +51,12 @@
       "topic": [
         "spital/RPI-TV/media/command",
         "spital/RPI-TV/media/command",
-        "spital/SV4/brightness/set",
         "spital/SKRIN4/brightness/set"
       ],
       "payload": [
         ["stop;zalozeni_spitalu_music_loop", 0],
         ["start;zalozeni_spitalu_sound2;media/4_3.wav", 0],
-        ["190", 0],
-        ["250", 0]
+        ["255", 0]
       ],
       "macro": {
         "focus_light": 0

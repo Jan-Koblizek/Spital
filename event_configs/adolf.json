@@ -34,13 +34,11 @@
       "name": "Adolf - Povidani 3",
       "topic": [
         "spital/RPI-TV/media/command",
-        "spital/SV2/brightness/set",
         "spital/SKRIN2/brightness/set"
       ],
       "payload": [
         ["start;adolf_sound3;media/2_2.wav", 0],
-        ["190", 0],
-        ["250", 0]
+        ["255", 0]
       ],
       "media_end": true
     },

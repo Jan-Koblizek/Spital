@@ -14,6 +14,8 @@
       "name": "Kontrola Start",
       "macro": {
         "all_light_power": "1",
+        "spotlight_light_color": "1",
+        "skrin_light_color": "1",
         "all_light_brightness": "0",
         "skrin_light_brightness": "0",
         "uv_light_brightness": "0"

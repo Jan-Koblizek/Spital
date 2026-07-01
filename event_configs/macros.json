@@ -24,6 +24,10 @@
       "5": "spital/SV5/hex/set",
       "6": "spital/SV6/hex/set"
     },
+    "skrin_color": {
+      "skrin2": "spital/SKRIN2/hex/set",
+      "skrin4": "spital/SKRIN4/hex/set"
+    },
     "power": {
       "1": "spital/SV1/light/set",
       "2": "spital/SV2/light/set",
@@ -117,6 +121,24 @@
     },
     "all_light_color": {
       "topic_group": "color"
+    },
+    "spotlight_light_color": {
+      "topic_group": "color",
+      "values": {
+        "1": "#FFA957",
+        "2": "#FFA957",
+        "3": "#FF9E38",
+        "4": "#FF9E38",
+        "5": "#FF9E38",
+        "6": "#FF9E38"
+      }
+    },
+    "skrin_light_color": {
+      "topic_group": "skrin_color",
+      "values": {
+        "skrin2": "#FF9E38",
+        "skrin4": "#FF9E38"
+      }
     },
     "all_light_power": {
       "topic_group": "power"
